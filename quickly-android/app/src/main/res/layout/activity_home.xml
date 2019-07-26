@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWindowBackground"
+    tools:context=".activities.Home">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/app_name"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:typeface="monospace" />
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/addTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/colorTextSecondary"
+        android:ems="10"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:hint="@string/hint_quickAddText"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:lines="1"
+        android:textColor="@color/colorTextSecondary"
+        android:textColorHint="@color/colorTextSecondary"
+        android:typeface="monospace" />
+
+    <ProgressBar
+        android:id="@+id/loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/addTask"
+        android:layout_gravity="fill_vertical"
+        android:clipToPadding="false"
+        android:isScrollContainer="false"
+        android:visibility="visible"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/titleToday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/title_today"
+                android:textColor="@color/colorTextPrimary"
+                android:typeface="monospace" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:descendantFocusability="blocksDescendants">
+
+                <sk.ttomovcik.quickly.views.NoScrollListView
+                    android:id="@+id/taskListToday"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@color/colorWindowBackground"
+                    android:dividerHeight="8dp"
+                    android:visibility="visible" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/titleTomorrow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/title_tomorrow"
+                android:textColor="@color/colorTextPrimary"
+                android:typeface="monospace" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:descendantFocusability="blocksDescendants">
+
+                <sk.ttomovcik.quickly.views.NoScrollListView
+                    android:id="@+id/taskListTomorrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@color/colorWindowBackground"
+                    android:dividerHeight="8dp"
+                    android:visibility="visible" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/titleUpcoming"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/title_upcoming"
+                android:textColor="@color/colorTextPrimary"
+                android:typeface="monospace" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:descendantFocusability="blocksDescendants">
+
+                <sk.ttomovcik.quickly.views.NoScrollListView
+                    android:id="@+id/taskListUpcoming"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@color/colorWindowBackground"
+                    android:dividerHeight="8dp"
+                    android:visibility="visible" />
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_addTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:text="@string/btn_addTask"
+        android:textColor="@color/colorFabIcon"
+        app:backgroundTint="@color/colorFabAddTask"
+        app:icon="@drawable/ic_add_black_24dp"
+        app:iconTint="@color/colorFabIcon"
+        app:rippleColor="@color/colorAccent" />
+</RelativeLayout>

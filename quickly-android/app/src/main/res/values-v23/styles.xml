@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -6,9 +7,10 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorWindowBackground</item>
         <item name="android:statusBarColor">@color/colorWindowBackground</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowContentTransitions">true</item>
 
-        <item name="scrimBackground">@color/mtrl_scrim_color</item>
+    <item name="scrimBackground">@color/mtrl_scrim_color</item>
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1
         </item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2

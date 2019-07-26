@@ -1,3 +1,27 @@
 <resources>
-    <string name="app_name">Quickly</string>
+    <string name="app_name">quickly</string>
+    <string name="app_version">0.1.0-alpha.0</string> <!-- Manually copied from build.gradle :/ -->
+
+    <string name="btn_setReminder">Reminder</string>
+    <string name="btn_setFinishDate">Finish date</string>
+    <string name="btn_setColor">Color</string>
+    <string name="btn_addTask">Add task</string>
+    <string name="btn_removeTask">Remove task</string>
+
+    <string name="title_addTask">Add task</string>
+    <string name="title_updateTask">Modify task</string>
+    <string name="title_noTaskName">No task name</string>
+    <string name="title_noTaskDate">No finish date set</string>
+    <string name="title_today">Today</string>
+    <string name="title_tomorrow">Tomorrow</string>
+    <string name="title_upcoming">Upcoming</string>
+
+    <string name="hint_quickAddText">Remind me to...</string>
+    <string name="hint_taskName">Name</string>
+    <string name="hint_taskNote">Additional notes (optional)</string>
+
+    <!-- Tasks-->
+    <string name="task_noTaskAdded">No tasks added</string>
+    <string name="task_ntaGetStarted">Get started by adding your task</string>
+    <string name="task_untitled">Untitled task</string>
 </resources>
