@@ -1,6 +1,7 @@
 package sk.ttomovcik.quickly.activities;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,7 +19,6 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.Objects;
 
@@ -32,10 +32,9 @@ import sk.ttomovcik.quickly.db.TaskDbHelper;
 public class AddTask extends AppCompatActivity
 {
     TaskDbHelper taskDbHelper;
-    DatePickerDialog datePickerDialog;
     Intent intent;
     boolean modifyTask;
-    String taskReminder, taskFinalDate, id;
+    String id;
     @BindView(R2.id.toolbar)
     MaterialToolbar materialToolbar;
     @BindView(R2.id.title)
@@ -43,9 +42,9 @@ public class AddTask extends AppCompatActivity
     @BindView(R2.id.tv_taskName)
     TextView tvTaskName;
     @BindView(R2.id.taskName)
-    TextInputEditText taskName;
+    TextInputEditText taskNameBox;
     @BindView(R2.id.taskNote)
-    TextInputEditText taskNote;
+    TextInputEditText taskNoteBox;
     @BindView(R2.id.fab_addTask)
     ExtendedFloatingActionButton addTask;
 
@@ -81,6 +80,7 @@ public class AddTask extends AppCompatActivity
         modifyTask = intent.getBooleanExtra("modifyTask", false);
         if (modifyTask) setModifyTask();
 
+        populatePlaceholdersFromStoredData(intent.getStringExtra("id"));
         displayTaskName();
     }
 
@@ -104,15 +104,15 @@ public class AddTask extends AppCompatActivity
 
     private void finishEditingTask()
     {
-        String _taskName = String.valueOf(taskName.getText());
+        String _taskName = String.valueOf(taskNameBox.getText());
 
-        if (modifyTask) taskDbHelper.updateTask(id, _taskName, taskNote.toString(), "", "", "");
+        if (modifyTask) taskDbHelper.updateTask(id, _taskName, taskNoteBox.toString(), "", "", "");
         else
         {
-            if (isEmpty(taskName.toString()))
-                taskDbHelper.addTask(getString(R.string.task_untitled), taskNote.toString(), "#000000", "", "");
+            if (isEmpty(taskNameBox.toString()))
+                taskDbHelper.addTask(getString(R.string.task_untitled), taskNoteBox.toString(), "#000000", "", "");
             else
-                taskDbHelper.addTask(_taskName, taskNote.toString(), "", "", "");
+                taskDbHelper.addTask(_taskName, taskNoteBox.toString(), "", "", "");
         }
         finish();
     }
@@ -146,7 +146,7 @@ public class AddTask extends AppCompatActivity
 
     private void displayTaskName()
     {
-        taskName.addTextChangedListener(new TextWatcher()
+        taskNameBox.addTextChangedListener(new TextWatcher()
         {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
@@ -156,18 +156,32 @@ public class AddTask extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
             {
-                tvTaskName.setText(taskName.getText());
+                tvTaskName.setText(taskNameBox.getText());
             }
 
             @Override
             public void afterTextChanged(Editable editable)
             {
-                if (isEmpty(taskName.toString()))
+                if (isEmpty(taskNameBox.toString()))
                 {
                     tvTaskName.setText(getString(R.string.title_noTaskName));
                 }
             }
         });
+    }
+
+    private void populatePlaceholdersFromStoredData(String id)
+    {
+        Cursor cTaskData = taskDbHelper.getDataFromId(id);
+        String _taskName = null, _taskNote = null;
+        if (cTaskData != null)
+        {
+            cTaskData.moveToFirst();
+            _taskName = cTaskData.getString(cTaskData.getColumnIndex("taskName"));
+            _taskNote = cTaskData.getString(cTaskData.getColumnIndex("taskNote"));
+        }
+        if (!isEmpty(_taskName)) taskNameBox.setText(_taskName);
+        if (!isEmpty(_taskNote)) taskNameBox.setText(_taskNote);
     }
 
     private boolean isEmpty(String string)

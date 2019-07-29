@@ -9,7 +9,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
-        versionName "0.1.1-alpha.0"
+        versionName "0.1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
@@ -17,8 +17,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
+        }
+        release {
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -52,7 +55,6 @@ dependencies {
 
     // Third-party - thank you for the awesome work fellas! ...and others :)
     implementation 'com.jakewharton:butterknife:10.1.0'
-    implementation 'com.wdullaer:materialdatetimepicker:4.2.1'
     implementation 'com.lifeofcoding:cacheutilslibrary:1.1.0@aar'
 
     // Annotation processors

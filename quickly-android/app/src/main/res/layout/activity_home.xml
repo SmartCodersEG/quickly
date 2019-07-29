@@ -55,6 +55,21 @@
         android:layout_centerInParent="true"
         android:progressTint="@color/colorAccent" />
 
+    <TextView
+        android:id="@+id/getStartedHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:lineSpacingExtra="8sp"
+        android:text="@string/hint_noTasksAdded"
+        android:textAlignment="center"
+        android:textColor="@color/colorTextSecondary"
+        android:typeface="monospace" />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"

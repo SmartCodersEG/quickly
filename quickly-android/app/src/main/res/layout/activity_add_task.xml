@@ -40,7 +40,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar">
+        android:layout_below="@id/toolbar"
+        android:layout_alignParentBottom="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/taskName"
@@ -62,59 +63,13 @@
             android:id="@+id/taskNote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/options"
+            android:layout_above="@id/fab_deleteTask"
             android:layout_margin="16dp"
             android:drawablePadding="8dp"
             android:hint="@string/hint_taskNote"
             android:lines="4"
             android:singleLine="false"
             android:textColor="@color/colorTextSecondary" />
-
-        <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/options"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/fab_addTask"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:flexDirection="row"
-            app:flexWrap="wrap"
-            app:justifyContent="space_between">
-
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/btn_setReminder"
-                android:textAllCaps="false"
-                android:textColor="@color/colorTextPrimary"
-                app:icon="@drawable/ic_add_alarm_black_24dp"
-                app:iconTint="@color/colorIcons"
-                app:rippleColor="@color/colorBtnReminder" />
-
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/btn_setFinishDate"
-                android:textAllCaps="false"
-                android:textColor="@color/colorTextPrimary"
-                app:icon="@drawable/ic_date_range_black_24dp"
-                app:iconTint="@color/colorIcons"
-                app:rippleColor="@color/colorBtnFinishDate" />
-
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/btn_setColor"
-                android:textAllCaps="false"
-                android:textColor="@color/colorTextPrimary"
-                app:icon="@drawable/ic_palette_black_24dp"
-                app:iconTint="@color/colorIcons"
-                app:rippleColor="@color/colorPrimaryLight" />
-        </com.google.android.flexbox.FlexboxLayout>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab_addTask"
@@ -127,7 +82,8 @@
             android:textColor="@color/colorFabIcon"
             app:backgroundTint="@color/colorAccent"
             app:icon="@drawable/ic_done_black_24dp"
-            app:iconTint="@color/colorFabIcon" />
+            app:iconTint="@color/colorFabIcon"
+            tools:ignore="RelativeOverlap" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab_deleteTask"

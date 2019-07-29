@@ -6,7 +6,7 @@
     <string name="btn_setFinishDate">Finish date</string>
     <string name="btn_setColor">Color</string>
     <string name="btn_addTask">Add task</string>
-    <string name="btn_removeTask">Remove task</string>
+    <string name="btn_removeTask">Remove</string>
 
     <string name="title_addTask">Add task</string>
     <string name="title_updateTask">Modify task</string>
@@ -14,11 +14,12 @@
     <string name="title_noTaskDate">No finish date set</string>
     <string name="title_appTheme">Application theme</string>
 
-    <string name="hint_quickAddText">Remind me to...</string>
+    <string name="hint_quickAddText">Do something amazing</string>
     <string name="hint_taskName">Name</string>
     <string name="hint_taskNote">Additional notes (optional)</string>
+    <string name="hint_noTasksAdded">It\'s pretty empty in here.\nGet started by adding something.</string>
 
-    <string name="toast_taskRemoved">Task removed</string>
+    <string name="toast_taskRemoved">Task will be removed soon</string>
 
     <!-- Tasks-->
     <string name="task_noTaskAdded">No tasks added</string>

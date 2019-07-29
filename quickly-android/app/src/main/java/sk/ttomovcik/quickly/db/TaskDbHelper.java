@@ -6,12 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import static sk.ttomovcik.quickly.db.Constants.DB_NAME;
-import static sk.ttomovcik.quickly.db.Constants.DB_TABLE;
-import static sk.ttomovcik.quickly.db.Constants.DB_VERSION;
+import sk.ttomovcik.quickly.BuildConfig;
 
 public class TaskDbHelper extends SQLiteOpenHelper
 {
+
+    private static final String DB_NAME = BuildConfig.APPLICATION_ID + ".todo.db";
+    private static final String DB_TABLE = "todo";
+    private static final int DB_VERSION = 1;
+
     /**
      * @param ctx Context
      */
@@ -88,6 +91,16 @@ public class TaskDbHelper extends SQLiteOpenHelper
     public Cursor getData()
     {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("select * from " + DB_TABLE + " order by id desc", null);
+        return db.rawQuery("select * from " + DB_TABLE
+                + " order by id desc", null);
+    }
+
+    public Cursor getDataFromId(String id)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("select * from " + DB_TABLE
+                + " WHERE id = '" + id
+                + "' order by id desc", null);
+
     }
 }

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -30,7 +31,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import sk.ttomovcik.quickly.R;
-import sk.ttomovcik.quickly.R2;
 import sk.ttomovcik.quickly.adapters.TaskListAdapter;
 import sk.ttomovcik.quickly.db.TaskDbHelper;
 import sk.ttomovcik.quickly.views.NoScrollListView;
@@ -40,26 +40,31 @@ public class Home extends AppCompatActivity
     public static String KEY_ID = "id";
     public static String KEY_TASK = "task";
 
+    int ANDROID_API_VERSION = Build.VERSION.SDK_INT;
+
     TaskDbHelper taskDbHelper;
     ArrayList<HashMap<String, String>> taskListHashMap = new ArrayList<>();
 
     // TextInputEditText -> addTask
-    @BindView(R2.id.addTask)
+    @BindView(R.id.addTask)
     TextInputEditText addTask;
 
     // NoScrollListView -> taskListUpcoming
-    @BindView(R2.id.taskList)
+    @BindView(R.id.taskList)
     NoScrollListView taskListUpcoming;
 
     // Progressbar -> loader
-    @BindView(R2.id.loader)
+    @BindView(R.id.loader)
     ProgressBar loader;
 
+    @BindView(R.id.getStartedHint)
+    TextView getStartedHint;
+
     // NestedScrollView -> scrollView
-    @BindView(R2.id.scrollView)
+    @BindView(R.id.scrollView)
     NestedScrollView scrollView;
 
-    @OnClick(R2.id.fab_addTask)
+    @OnClick(R.id.fab_addTask)
     void onClick()
     {
         Intent intent = new Intent(Home.this, AddTask.class);
@@ -67,23 +72,11 @@ public class Home extends AppCompatActivity
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
     }
 
-    @OnClick(R2.id.changeTheme)
+    @OnClick(R.id.changeTheme)
     void onClickChangeTheme()
     {
-        String[] APP_THEMES_PRE_Q = {
-                getString(R.string.pref_appTheme_setByBatterySaver),
-                getString(R.string.pref_appTheme_light),
-                getString(R.string.pref_appTheme_dark)
-        };
-        String[] APP_THEMES_Q = {
-                getString(R.string.pref_appTheme_systemDefault),
-                getString(R.string.pref_appTheme_light),
-                getString(R.string.pref_appTheme_dark)
-        };
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        String appTheme = sharedPreferences.getString("appTheme", "");
-        int ANDROID_API_VERSION = Build.VERSION.SDK_INT;
+        String[] APP_THEMES_PRE_Q = {getString(R.string.pref_appTheme_setByBatterySaver), getString(R.string.pref_appTheme_light), getString(R.string.pref_appTheme_dark)};
+        String[] APP_THEMES_Q = {getString(R.string.pref_appTheme_systemDefault), getString(R.string.pref_appTheme_light), getString(R.string.pref_appTheme_dark)};
         String[] APP_THEMES_TARGET = ANDROID_API_VERSION >= 29 ? APP_THEMES_Q : APP_THEMES_PRE_Q;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.title_appTheme));
@@ -92,24 +85,13 @@ public class Home extends AppCompatActivity
             switch (which)
             {
                 case 0: // Set by battery saver or system default
-                    if (ANDROID_API_VERSION >= 29)
-                    {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                        editor.putInt(appTheme, -1).apply();
-                    }
-                    else
-                    {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-                        editor.putInt(appTheme, 3).apply();
-                    }
+                    applyTheme(0);
                     break;
                 case 1: // Light theme
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    editor.putInt(appTheme, 2).apply();
+                    applyTheme(1);
                     break;
                 case 2: // Dark theme
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    editor.putInt(appTheme, 2).apply();
+                    applyTheme(2);
                     break;
             }
         });
@@ -143,6 +125,7 @@ public class Home extends AppCompatActivity
         taskDbHelper = new TaskDbHelper(this);
         scrollView.setVisibility(View.GONE);
         loader.setVisibility(View.VISIBLE);
+        getStartedHint.setVisibility(View.VISIBLE);
         LoadTask loadTask = new LoadTask();
         loadTask.execute();
     }
@@ -171,6 +154,36 @@ public class Home extends AppCompatActivity
         });
     }
 
+    private void applyTheme(int themeId)
+    {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String appTheme = sharedPreferences.getString("appTheme", "");
+        switch (themeId)
+        {
+            case 0: // Set by battery saver or system default
+                if (ANDROID_API_VERSION >= 29)
+                {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                    editor.putInt(appTheme, -1).apply();
+                }
+                else
+                {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                    editor.putInt(appTheme, 3).apply();
+                }
+                break;
+            case 1: // Light theme
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                editor.putInt(appTheme, 2).apply();
+                break;
+            case 2: // Dark theme
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                editor.putInt(appTheme, 2).apply();
+                break;
+        }
+    }
+
     @SuppressLint("StaticFieldLeak")
     class LoadTask extends AsyncTask<String, Void, String>
     {
@@ -194,6 +207,7 @@ public class Home extends AppCompatActivity
             loadListView(taskListUpcoming, taskListHashMap);
             loader.setVisibility(View.GONE);
             scrollView.setVisibility(View.VISIBLE);
+            if (!taskListHashMap.isEmpty()) getStartedHint.setVisibility(View.GONE);
         }
     }
 
