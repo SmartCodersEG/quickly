@@ -9,6 +9,7 @@
     <color name="colorBtnFinishDate">#FFCDD2</color>
     <color name="colorFabAddTask">#212121</color>
     <color name="colorFabDeleteTask">#202020</color>
+    <color name="colorListItemBackground">#424242</color>
 
     <!-- Text, dividers, icons -->
     <color name="colorTextPrimary">#FAFAFA</color>

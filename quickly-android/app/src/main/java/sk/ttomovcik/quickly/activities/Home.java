@@ -2,26 +2,29 @@ package sk.ttomovcik.quickly.activities;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.widget.NestedScrollView;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,37 +41,15 @@ public class Home extends AppCompatActivity
     public static String KEY_TASK = "task";
 
     TaskDbHelper taskDbHelper;
-    ArrayList<HashMap<String, String>> taskListTodayHashMap = new ArrayList<>();
-    ArrayList<HashMap<String, String>> taskListTomorrowHashMap = new ArrayList<>();
-    ArrayList<HashMap<String, String>> taskListUpcomingHashMap = new ArrayList<>();
+    ArrayList<HashMap<String, String>> taskListHashMap = new ArrayList<>();
 
     // TextInputEditText -> addTask
     @BindView(R2.id.addTask)
     TextInputEditText addTask;
 
-    // NoScrollListView -> taskListToday
-    @BindView(R2.id.taskListToday)
-    NoScrollListView taskListToday;
-
-    // NoScrollListView -> taskListTomorrow
-    @BindView(R2.id.taskListTomorrow)
-    NoScrollListView taskListTomorrow;
-
     // NoScrollListView -> taskListUpcoming
-    @BindView(R2.id.taskListUpcoming)
+    @BindView(R2.id.taskList)
     NoScrollListView taskListUpcoming;
-
-    // TextView -> titleToday
-    @BindView(R2.id.titleToday)
-    TextView titleToday;
-
-    // TextView -> titleTomorrow
-    @BindView(R2.id.titleTomorrow)
-    TextView titleTomorrow;
-
-    // TextView -> titleUpcoming
-    @BindView(R2.id.titleUpcoming)
-    TextView titleUpcoming;
 
     // Progressbar -> loader
     @BindView(R2.id.loader)
@@ -86,10 +67,65 @@ public class Home extends AppCompatActivity
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
     }
 
+    @OnClick(R2.id.changeTheme)
+    void onClickChangeTheme()
+    {
+        String[] APP_THEMES_PRE_Q = {
+                getString(R.string.pref_appTheme_setByBatterySaver),
+                getString(R.string.pref_appTheme_light),
+                getString(R.string.pref_appTheme_dark)
+        };
+        String[] APP_THEMES_Q = {
+                getString(R.string.pref_appTheme_systemDefault),
+                getString(R.string.pref_appTheme_light),
+                getString(R.string.pref_appTheme_dark)
+        };
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String appTheme = sharedPreferences.getString("appTheme", "");
+        int ANDROID_API_VERSION = Build.VERSION.SDK_INT;
+        String[] APP_THEMES_TARGET = ANDROID_API_VERSION >= 29 ? APP_THEMES_Q : APP_THEMES_PRE_Q;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.title_appTheme));
+        builder.setItems(APP_THEMES_TARGET, (dialog, which) ->
+        {
+            switch (which)
+            {
+                case 0: // Set by battery saver or system default
+                    if (ANDROID_API_VERSION >= 29)
+                    {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                        editor.putInt(appTheme, -1).apply();
+                    }
+                    else
+                    {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                        editor.putInt(appTheme, 3).apply();
+                    }
+                    break;
+                case 1: // Light theme
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    editor.putInt(appTheme, 2).apply();
+                    break;
+                case 2: // Dark theme
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    editor.putInt(appTheme, 2).apply();
+                    break;
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        int storedTheme = Integer.parseInt(sharedPref.getString("appTheme", "-1000"));
+        if (storedTheme == 2)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         quickAddTask();
@@ -135,22 +171,6 @@ public class Home extends AppCompatActivity
         });
     }
 
-    private static String generateColor(Random r)
-    {
-        final char[] hex = {'0', '1', '2', '3', '4', '5', '6',
-                '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-        char[] s = new char[7];
-        int n = r.nextInt(0x1000000);
-
-        s[0] = '#';
-        for (int i = 1; i < 7; i++)
-        {
-            s[i] = hex[n & 0xf];
-            n >>= 4;
-        }
-        return new String(s);
-    }
-
     @SuppressLint("StaticFieldLeak")
     class LoadTask extends AsyncTask<String, Void, String>
     {
@@ -158,38 +178,20 @@ public class Home extends AppCompatActivity
         protected void onPreExecute()
         {
             super.onPreExecute();
-
-            taskListTodayHashMap.clear();
-            taskListTomorrowHashMap.clear();
-            taskListUpcomingHashMap.clear();
+            taskListHashMap.clear();
         }
 
         protected String doInBackground(String... args)
         {
-            String xml = "";
-            Cursor dataToday = taskDbHelper.getDataToday();
-            loadDataList(dataToday, taskListTodayHashMap);
-            Cursor dataTomorrow = taskDbHelper.getDataTomorrow();
-            loadDataList(dataTomorrow, taskListTomorrowHashMap);
-            Cursor dataUpcoming = taskDbHelper.getDataUpcoming();
-            loadDataList(dataUpcoming, taskListUpcomingHashMap);
-            Cursor dataUpcomingWithoutDate = taskDbHelper.getData();
-            loadDataList(dataUpcomingWithoutDate, taskListUpcomingHashMap);
-            return xml;
+            Cursor taskData = taskDbHelper.getData();
+            loadDataList(taskData, taskListHashMap);
+            return "";
         }
 
         @Override
         protected void onPostExecute(String xml)
         {
-            loadListView(taskListToday, taskListTodayHashMap);
-            loadListView(taskListTomorrow, taskListTomorrowHashMap);
-            loadListView(taskListUpcoming, taskListUpcomingHashMap);
-            if (taskListTodayHashMap.size() > 0) titleToday.setVisibility(View.VISIBLE);
-            else titleToday.setVisibility(View.GONE);
-            if (taskListTomorrowHashMap.size() > 0) titleTomorrow.setVisibility(View.VISIBLE);
-            else titleTomorrow.setVisibility(View.GONE);
-            if (taskListUpcomingHashMap.size() > 0) titleUpcoming.setVisibility(View.VISIBLE);
-            else titleUpcoming.setVisibility(View.GONE);
+            loadListView(taskListUpcoming, taskListHashMap);
             loader.setVisibility(View.GONE);
             scrollView.setVisibility(View.VISIBLE);
         }

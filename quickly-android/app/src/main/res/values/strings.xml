@@ -12,16 +12,21 @@
     <string name="title_updateTask">Modify task</string>
     <string name="title_noTaskName">No task name</string>
     <string name="title_noTaskDate">No finish date set</string>
-    <string name="title_today">Today</string>
-    <string name="title_tomorrow">Tomorrow</string>
-    <string name="title_upcoming">Upcoming</string>
+    <string name="title_appTheme">Application theme</string>
 
     <string name="hint_quickAddText">Remind me to...</string>
     <string name="hint_taskName">Name</string>
     <string name="hint_taskNote">Additional notes (optional)</string>
 
+    <string name="toast_taskRemoved">Task removed</string>
+
     <!-- Tasks-->
     <string name="task_noTaskAdded">No tasks added</string>
     <string name="task_ntaGetStarted">Get started by adding your task</string>
     <string name="task_untitled">Untitled task</string>
+
+    <string name="pref_appTheme_light">Light</string>
+    <string name="pref_appTheme_dark">Dark</string>
+    <string name="pref_appTheme_systemDefault">Follow system settings (default)</string>
+    <string name="pref_appTheme_setByBatterySaver">Set by battery saver (default)</string>
 </resources>

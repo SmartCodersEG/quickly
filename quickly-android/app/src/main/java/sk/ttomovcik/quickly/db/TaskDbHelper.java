@@ -79,39 +79,15 @@ public class TaskDbHelper extends SQLiteOpenHelper
         db.update(DB_TABLE, contentValues, "id = ? ", new String[]{id});
     }
 
+    public void deleteTask(String id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(DB_TABLE, "ID=?", new String[]{id});
+    }
+
     public Cursor getData()
     {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("select * from " + DB_TABLE + " order by id desc", null);
-    }
-
-    public Cursor getDataSpecific(String id)
-    {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("select * from " + DB_TABLE + " WHERE id = '" + id + "' order by id desc", null);
-    }
-
-    public Cursor getDataToday()
-    {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("select * from " + DB_TABLE +
-                " WHERE date(datetime(taskFinishDate / 1000 , 'unixepoch', 'localtime')) " +
-                "= date('now', 'localtime') order by id desc", null);
-    }
-
-    public Cursor getDataTomorrow()
-    {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("select * from " + DB_TABLE +
-                " WHERE date(datetime(taskFinishDate / 1000 , 'unixepoch', 'localtime')) " +
-                "= date('now', '+1 day', 'localtime')  order by id desc", null);
-    }
-
-    public Cursor getDataUpcoming()
-    {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("select * from " + DB_TABLE +
-                " WHERE date(datetime(taskFinishDate / 1000 , 'unixepoch', 'localtime'))" +
-                " > date('now', '+1 day', 'localtime') order by id desc", null);
     }
 }

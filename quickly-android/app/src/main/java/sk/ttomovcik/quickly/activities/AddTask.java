@@ -12,8 +12,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -43,12 +46,21 @@ public class AddTask extends AppCompatActivity
     TextInputEditText taskName;
     @BindView(R2.id.taskNote)
     TextInputEditText taskNote;
+    @BindView(R2.id.fab_addTask)
+    ExtendedFloatingActionButton addTask;
 
     @OnClick(R2.id.fab_addTask)
-    void onClick()
+    void onClickAddOrModify()
     {
         finishEditingTask();
     }
+
+    @OnClick(R2.id.fab_deleteTask)
+    void onClickDelete()
+    {
+        deleteTask();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -87,30 +99,39 @@ public class AddTask extends AppCompatActivity
     {
         id = intent.getStringExtra("id");
         title.setText(R.string.title_updateTask);
+        addTask.setText(R.string.title_updateTask);
     }
 
     private void finishEditingTask()
     {
         String _taskName = String.valueOf(taskName.getText());
-        if (isEmpty(taskName.toString()))
-        {
-            taskDbHelper.addTask(
-                    getString(R.string.task_untitled),
-                    taskNote.toString(),
-                    "#000000",
-                    "",
-                    "");
-        }
+
+        if (modifyTask) taskDbHelper.updateTask(id, _taskName, taskNote.toString(), "", "", "");
         else
         {
-            taskDbHelper.addTask(
-                    _taskName,
-                    taskNote.toString(),
-                    "",
-                    "",
-                    "");
+            if (isEmpty(taskName.toString()))
+                taskDbHelper.addTask(getString(R.string.task_untitled), taskNote.toString(), "#000000", "", "");
+            else
+                taskDbHelper.addTask(_taskName, taskNote.toString(), "", "", "");
         }
         finish();
+    }
+
+    private void deleteTask()
+    {
+        Snackbar.make(getWindow().getDecorView().getRootView(), getString(R.string.toast_taskRemoved), Snackbar.LENGTH_SHORT)
+                .addCallback(new Snackbar.Callback()
+                {
+                    public void onDismissed(Snackbar snackbar, int event)
+                    {
+                        taskDbHelper.deleteTask(id);
+                        finish();
+                    }
+                })
+                .setAction("Undo", view -> finish())
+                .setActionTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .show();
+
     }
 
     public void setSlideAnimation()
