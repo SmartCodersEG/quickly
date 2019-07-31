@@ -15,12 +15,14 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.widget.NestedScrollView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -59,11 +61,14 @@ public class Home extends AppCompatActivity
     ProgressBar loader;
 
     @BindView(R.id.getStartedHint)
-    TextView getStartedHint;
+    RelativeLayout getStartedHint;
 
     // NestedScrollView -> scrollView
     @BindView(R.id.scrollView)
     NestedScrollView scrollView;
+
+    @BindView(R.id.title)
+    TextView title;
 
     @OnClick(R.id.fab_addTask)
     void onClick()
@@ -209,6 +214,11 @@ public class Home extends AppCompatActivity
             loadListView(taskListUpcoming, taskListHashMap);
             loader.setVisibility(View.GONE);
             scrollView.setVisibility(View.VISIBLE);
+            title.setOnLongClickListener(view ->
+            {
+                Snackbar.make(getWindow().getDecorView().getRootView(), "meow", Snackbar.LENGTH_SHORT).show();
+                return true;
+            });
             if (!taskListHashMap.isEmpty()) getStartedHint.setVisibility(View.GONE);
         }
     }
