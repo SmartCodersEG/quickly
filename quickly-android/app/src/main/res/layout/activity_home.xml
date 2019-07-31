@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWindowBackground"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".activities.Home">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -28,7 +30,8 @@
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                android:typeface="monospace" />
+                android:typeface="monospace"
+                tools:ignore="RelativeOverlap" />
 
             <ImageButton
                 android:id="@+id/changeTheme"
@@ -119,9 +122,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:outlineAmbientShadowColor="@color/colorFabAddTask"
-            android:outlineSpotShadowColor="@color/colorFabAddTask"
-            android:shadowColor="@color/colorFabAddTask"
             app:backgroundTint="@color/colorFabAddTask"
             app:elevation="4dp"
             app:icon="@drawable/ic_add_black_24dp"

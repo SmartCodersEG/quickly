@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -19,7 +20,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.widget.NestedScrollView;
-import androidx.preference.PreferenceManager;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -30,6 +30,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import sk.ttomovcik.quickly.BuildConfig;
 import sk.ttomovcik.quickly.R;
 import sk.ttomovcik.quickly.adapters.TaskListAdapter;
 import sk.ttomovcik.quickly.db.TaskDbHelper;
@@ -104,13 +105,24 @@ public class Home extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        int storedTheme = Integer.parseInt(sharedPref.getString("appTheme", "-1000"));
+        SharedPreferences sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
+        int storedTheme = sharedPref.getInt("appTheme", 0);
+        Log.i("themeManager", String.valueOf(storedTheme));
         if (storedTheme == 2)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        quickAddTask();
+        initQuickAddTask();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        SharedPreferences sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("appTheme", AppCompatDelegate.getDefaultNightMode());
+        editor.apply();
     }
 
     @Override
@@ -130,8 +142,9 @@ public class Home extends AppCompatActivity
         loadTask.execute();
     }
 
-    private void quickAddTask()
+    private void initQuickAddTask()
     {
+        addTask.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         addTask.setOnEditorActionListener((v, actionId, event) ->
         {
             if (event != null && event.getKeyCode()
@@ -156,30 +169,19 @@ public class Home extends AppCompatActivity
 
     private void applyTheme(int themeId)
     {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        String appTheme = sharedPreferences.getString("appTheme", "");
         switch (themeId)
         {
             case 0: // Set by battery saver or system default
                 if (ANDROID_API_VERSION >= 29)
-                {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                    editor.putInt(appTheme, -1).apply();
-                }
                 else
-                {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-                    editor.putInt(appTheme, 3).apply();
-                }
                 break;
             case 1: // Light theme
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                editor.putInt(appTheme, 2).apply();
                 break;
             case 2: // Dark theme
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                editor.putInt(appTheme, 2).apply();
                 break;
         }
     }

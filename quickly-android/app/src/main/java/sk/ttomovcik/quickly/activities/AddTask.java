@@ -79,8 +79,6 @@ public class AddTask extends AppCompatActivity
         intent = getIntent();
         modifyTask = intent.getBooleanExtra("modifyTask", false);
         if (modifyTask) setModifyTask();
-
-        populatePlaceholdersFromStoredData(intent.getStringExtra("id"));
         displayTaskName();
     }
 
@@ -100,6 +98,7 @@ public class AddTask extends AppCompatActivity
         id = intent.getStringExtra("id");
         title.setText(R.string.title_updateTask);
         addTask.setText(R.string.title_updateTask);
+        populatePlaceholdersFromStoredData(id);
     }
 
     private void finishEditingTask()
