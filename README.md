@@ -19,14 +19,14 @@
   <p align="center">
     Simple To-Do app for Android.
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Download for Android »</strong></a>
+    <a href="https://github.com/ttomovcik/quickly/releases"><strong>Download for Android »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">About Quickly</a>
+    <a href="https://github.com/ttomovcik/quickly">About Quickly</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
+    <a href="https://github.com/ttomovcik/quickly/issues">Report Bug</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
+    <a href="https://github.com/ttomovcik/quickly/issues">Request Feature</a>
   </p>
 </p>
 
