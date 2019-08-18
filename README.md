@@ -11,7 +11,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/ttomovcik/quickly">
-    <img src="docs/icons/logo.png" alt="Quickly app icon" width="80" height="80">
+    <img src="quickly-android/app/src/main/ic_launcher-web.png" alt="Quickly app icon" width="80" height="80">
   </a>
 
   <h2 align="center">Quickly</h2>
