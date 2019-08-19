@@ -104,14 +104,15 @@ public class AddTask extends AppCompatActivity
     private void finishEditingTask()
     {
         String _taskName = String.valueOf(taskNameBox.getText());
+        String _taskNote = String.valueOf(taskNoteBox.getText());
 
-        if (modifyTask) taskDbHelper.updateTask(id, _taskName, taskNoteBox.toString(), "", "", "");
+        if (modifyTask) taskDbHelper.updateTask(id, _taskName, _taskNote, "", "", "");
         else
         {
-            if (isEmpty(taskNameBox.toString()))
-                taskDbHelper.addTask(getString(R.string.task_untitled), taskNoteBox.toString(), "#000000", "", "");
+            if (isEmpty(_taskNote))
+                taskDbHelper.addTask(getString(R.string.task_untitled), _taskNote, "#000000", "", "");
             else
-                taskDbHelper.addTask(_taskName, taskNoteBox.toString(), "", "", "");
+                taskDbHelper.addTask(_taskName, _taskNote, "", "", "");
         }
         finish();
     }
@@ -180,6 +181,7 @@ public class AddTask extends AppCompatActivity
             _taskNote = cTaskData.getString(cTaskData.getColumnIndex("taskNote"));
         }
         if (!isEmpty(_taskName)) taskNameBox.setText(_taskName);
+        if (!isEmpty(_taskName)) tvTaskName.setText(_taskName);
         if (!isEmpty(_taskNote)) taskNameBox.setText(_taskNote);
     }
 
