@@ -54,12 +54,19 @@
 
 [![Quickly screenshot][screenshot]](https://github.com/ttomovcik/quickly)
 
-I seriously don't know how to describe a To-Do app. Like - oh, you type stuff that you want to do eventually and this app reminds you to do so. Idk fellas. This readme will be updated later.
+The main reason why quickly is here with us, is the lazyness of it's developer. @ttomovcik is simply 
+too lazy to find a minimalistic to-do app, so he's made one himself. Right now, this app is in Beta version and onl available on Github.
+Sooner or later, it's gonna be released on Google Play Store.
 
 ### Features
-* It can show you stuff you saved
-* Idk, works?
-
+* Adding notes 👌
+* (ongoing) Fancy settings UI (who doesn't like that)
+* (planned) Backup and restore notes
+* (planned) Sync with cloud
+* (planned) Live editing across multiple devices (😋)
+* (planned) Stylus and touch input support
+* (planned) Drop in files
+* (planned) Sharing across apps (from and to quickly)
 
 ### Built With
 * [Android Studio](https://developer.android.com/studio)
@@ -75,6 +82,7 @@ Want to customize Quicly or just get the lastest version from GitHub? Look no mo
 Here's what you're gonna need.
 * Android Studio
 * AVD or phone running Android.
+* Platform tools or at least adb binary installed
 
 ### Installation
 
@@ -83,11 +91,13 @@ Here's what you're gonna need.
 ```sh
 git clone https:://github.com/ttomovcik/quickly.git
 ```
-3. Import this project into Android Studio
+3. Assemble debug release (apk)
 ```sh
-Android Studio -> Import project (Gradle, eclipse, ADT, etc.)
+cd quickly-android
+chmod +x gradlew
+./gradlew assembleDebug
 ```
-4. Build the project and run the app in VM or physical device.
+4. Rrun the app in VM or physical device.
 
 > No tests are implemented yet.
 
@@ -95,14 +105,14 @@ Or, you can get Quicly from **F-droid** store or **Google Play Store**.
 
 ## Usage
 
-If you really don't know how to use a To-Do app, I have no idea how to help you. Except:
+I think you'll figure it out. If not, well,
 
 _For more help, please refer to the [**Wiki page**](https://github.com/ttomovcik/quickly/wiki)_
 
 ## Roadmap
 
 See the [_**open issues**_](https://github.com/ttomovcik/quickly/issues) for a list of proposed features (and known issues).
-Or the [_**projects tab**_](https://github.com/ttomovcik/quickly/projects) for a list of stuff that's being currently worked on). All the magic is happening in the _**develop/**_ branch. Only stable code in in the _**master/**_ branch.
+All the magic is happening in the _**develop/**_ branch. Only stable code in in the _**master/**_ branch.
 
 ## Contributing
 
@@ -140,4 +150,4 @@ Project Link: [https://github.com/ttomovcik/quickly](https://github.com/ttomovci
 [badge-contributors]: https://img.shields.io/github/contributors/ttomovcik/quickly?color=EA005E&style=flat-square
 
 <!-- Others -->
-[screenshot]: https://github.com/ttomovcik/quickly/raw/develop/docs/screenshots/placeholder.jpeg
+[screenshot]: docs/screenshots/light.jpg
