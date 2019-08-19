@@ -1,0 +1,73 @@
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Accounts and sync -->
+    <PreferenceCategory app:title="@string/pref_group_accountsAndSync">
+        <Preference
+            app:icon="@drawable/ic_person_black_24dp"
+            app:key="signIn"
+            app:enabled="false"
+            app:summary="@string/pref_desc_connect"
+            app:title="@string/pref_title_accounts_connect" />
+
+        <SwitchPreferenceCompat
+            app:icon="@drawable/ic_sync_black_24dp"
+            app:key="syncState"
+            app:summary="@string/pref_desc_sync"
+            app:title="@string/pref_title_accounts_sync" />
+
+        <Preference
+            app:icon="@drawable/ic_delete_forever_black_24dp"
+            app:key="deleteAccount"
+            app:summary="@string/pref_desc_delete"
+            app:title="@string/pref_title_accounts_delete" />
+    </PreferenceCategory>
+
+    <!-- Note management -->
+    <PreferenceCategory app:title="@string/pref_group_noteMgmt">
+
+        <Preference
+            app:icon="@drawable/ic_save_black_24dp"
+            app:key="exportNotesFromDb"
+            app:summary="@string/pref_desc_backup"
+            app:title="@string/pref_title_noteMgmt_backup" />
+
+        <Preference
+            app:icon="@drawable/ic_restore_black_24dp"
+            app:key="importNotesFromDb"
+            app:summary="@string/pref_desc_restore"
+            app:title="@string/pref_title_noteMgmt_restore" />
+
+        <Preference
+            app:icon="@drawable/ic_delete_forever_black_24dp"
+            app:key="clearAll"
+            app:summary="@string/pref_desc_clearAll"
+            app:title="@string/pref_title_noteMgmt_clearAll" />
+    </PreferenceCategory>
+
+    <!-- General -->
+    <PreferenceCategory app:title="@string/pref_group_general">
+
+        <Preference
+            app:icon="@drawable/ic_palette_black_24dp"
+            app:key="appTheme"
+            app:summary="@string/pref_desc_appTheme"
+            app:title="@string/pref_title_general_theme" />
+
+        <Preference
+            app:icon="@drawable/ic_help_black_24dp"
+            app:key="help"
+            app:summary="@string/pref_desc_help"
+            app:title="@string/pref_title_general_help" />
+
+        <Preference
+            app:key="thirdParty"
+            app:summary="@string/pref_desc_thirdPartyNotices"
+            app:title="@string/pref_title_general_thirdPartyNotices" />
+
+        <Preference
+            app:key="about"
+            app:summary="@string/pref_desc_about"
+            app:title="@string/pref_title_general_about" />
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

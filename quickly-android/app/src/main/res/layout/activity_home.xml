@@ -34,7 +34,7 @@
                 tools:ignore="RelativeOverlap" />
 
             <ImageButton
-                android:id="@+id/changeTheme"
+                android:id="@+id/openSettings"
                 style="@style/Widget.Design.FloatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
                 android:contentDescription="@string/app_name"
                 android:focusable="true"
                 android:padding="8dp"
-                android:src="@drawable/ic_palette_black_24dp" />
+                android:src="@drawable/ic_settings_black_24dp" />
         </RelativeLayout>
     </com.google.android.material.appbar.MaterialToolbar>
 
@@ -102,6 +102,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
             android:gravity="center"
             android:orientation="vertical">
 

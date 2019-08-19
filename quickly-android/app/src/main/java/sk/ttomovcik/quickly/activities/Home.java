@@ -2,7 +2,6 @@ package sk.ttomovcik.quickly.activities;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -43,8 +42,6 @@ public class Home extends AppCompatActivity
     public static String KEY_ID = "id";
     public static String KEY_TASK = "task";
 
-    int ANDROID_API_VERSION = Build.VERSION.SDK_INT;
-
     TaskDbHelper taskDbHelper;
     ArrayList<HashMap<String, String>> taskListHashMap = new ArrayList<>();
 
@@ -78,31 +75,10 @@ public class Home extends AppCompatActivity
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
     }
 
-    @OnClick(R.id.changeTheme)
-    void onClickChangeTheme()
+    @OnClick(R.id.openSettings)
+    void openSettings()
     {
-        String[] APP_THEMES_PRE_Q = {getString(R.string.pref_appTheme_setByBatterySaver), getString(R.string.pref_appTheme_light), getString(R.string.pref_appTheme_dark)};
-        String[] APP_THEMES_Q = {getString(R.string.pref_appTheme_systemDefault), getString(R.string.pref_appTheme_light), getString(R.string.pref_appTheme_dark)};
-        String[] APP_THEMES_TARGET = ANDROID_API_VERSION >= 29 ? APP_THEMES_Q : APP_THEMES_PRE_Q;
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.title_appTheme));
-        builder.setItems(APP_THEMES_TARGET, (dialog, which) ->
-        {
-            switch (which)
-            {
-                case 0: // Set by battery saver or system default
-                    applyTheme(0);
-                    break;
-                case 1: // Light theme
-                    applyTheme(1);
-                    break;
-                case 2: // Dark theme
-                    applyTheme(2);
-                    break;
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        startActivity(new Intent(this, Settings.class));
     }
 
 
@@ -170,25 +146,6 @@ public class Home extends AppCompatActivity
             }
             return false;
         });
-    }
-
-    private void applyTheme(int themeId)
-    {
-        switch (themeId)
-        {
-            case 0: // Set by battery saver or system default
-                if (ANDROID_API_VERSION >= 29)
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                else
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-                break;
-            case 1: // Light theme
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                break;
-            case 2: // Dark theme
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
-        }
     }
 
     @SuppressLint("StaticFieldLeak")
