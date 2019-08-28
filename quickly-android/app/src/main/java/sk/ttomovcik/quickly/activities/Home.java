@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -37,17 +36,18 @@ import sk.ttomovcik.quickly.adapters.TaskListAdapter;
 import sk.ttomovcik.quickly.db.TaskDbHelper;
 import sk.ttomovcik.quickly.views.NoScrollListView;
 
-public class Home extends AppCompatActivity
-{
+public class Home extends AppCompatActivity {
     public static String KEY_ID = "id";
     public static String KEY_TASK = "task";
 
+    // TextInputEditText -> TextInputEditText_AddTask
+    @BindView(R.id.addTask)
+    TextInputEditText TextInputEditText_AddTask;
+
     TaskDbHelper taskDbHelper;
     ArrayList<HashMap<String, String>> taskListHashMap = new ArrayList<>();
-
-    // TextInputEditText -> addTask
-    @BindView(R.id.addTask)
-    TextInputEditText addTask;
+    @BindView(R.id.title)
+    TextView tv_windowTitle;
 
     // NoScrollListView -> taskListUpcoming
     @BindView(R.id.taskList)
@@ -63,28 +63,29 @@ public class Home extends AppCompatActivity
     // NestedScrollView -> scrollView
     @BindView(R.id.scrollView)
     NestedScrollView scrollView;
-
-    @BindView(R.id.title)
-    TextView title;
+    // TODO: Show random text in the TextInputEditText_AddTask hint thingy.
+    private String[] addTaskHints = new String[]{
+            "Do something amazing",
+            "Remind me to...",
+            "Yes, tap here to add task..",
+            "<insert hint text here>"
+    };
 
     @OnClick(R.id.fab_addTask)
-    void onClick()
-    {
+    void onClick() {
         Intent intent = new Intent(Home.this, AddTask.class);
         intent.putExtra("modifyTask", false);
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
     }
 
     @OnClick(R.id.openSettings)
-    void openSettings()
-    {
+    void openSettings() {
         startActivity(new Intent(this, Settings.class));
     }
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
         int storedTheme = sharedPref.getInt("appTheme", 0);
@@ -97,8 +98,7 @@ public class Home extends AppCompatActivity
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
         SharedPreferences sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -107,14 +107,12 @@ public class Home extends AppCompatActivity
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         populateData();
     }
 
-    private void populateData()
-    {
+    private void populateData() {
         taskDbHelper = new TaskDbHelper(this);
         scrollView.setVisibility(View.GONE);
         loader.setVisibility(View.VISIBLE);
@@ -123,24 +121,17 @@ public class Home extends AppCompatActivity
         loadTask.execute();
     }
 
-    private void initQuickAddTask()
-    {
-        addTask.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        addTask.setOnEditorActionListener((v, actionId, event) ->
+    private void initQuickAddTask() {
+        TextInputEditText_AddTask.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        TextInputEditText_AddTask.setOnEditorActionListener((v, actionId, event) ->
         {
             if (event != null && event.getKeyCode()
                     == KeyEvent.KEYCODE_ENTER
-                    || actionId == EditorInfo.IME_ACTION_DONE)
-            {
+                    || actionId == EditorInfo.IME_ACTION_DONE) {
                 TaskDbHelper taskDbHelper = new TaskDbHelper(this);
-                String _taskName = String.valueOf(addTask.getText());
-                taskDbHelper.addTask(
-                        _taskName,
-                        "",
-                        "",
-                        "",
-                        "");
-                Objects.requireNonNull(addTask.getText()).clear();
+                String _taskName = String.valueOf(TextInputEditText_AddTask.getText());
+                taskDbHelper.addTask(_taskName, "", "", "", "");
+                Objects.requireNonNull(TextInputEditText_AddTask.getText()).clear();
                 populateData();
                 return true;
             }
@@ -148,45 +139,10 @@ public class Home extends AppCompatActivity
         });
     }
 
-    @SuppressLint("StaticFieldLeak")
-    class LoadTask extends AsyncTask<String, Void, String>
-    {
-        @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
-            taskListHashMap.clear();
-        }
-
-        protected String doInBackground(String... args)
-        {
-            Cursor taskData = taskDbHelper.getData();
-            loadDataList(taskData, taskListHashMap);
-            return "";
-        }
-
-        @Override
-        protected void onPostExecute(String xml)
-        {
-            loadListView(taskListUpcoming, taskListHashMap);
-            loader.setVisibility(View.GONE);
-            scrollView.setVisibility(View.VISIBLE);
-            title.setOnLongClickListener(view ->
-            {
-                Snackbar.make(getWindow().getDecorView().getRootView(), "meow", Snackbar.LENGTH_SHORT).show();
-                return true;
-            });
-            if (!taskListHashMap.isEmpty()) getStartedHint.setVisibility(View.GONE);
-        }
-    }
-
-    public void loadDataList(Cursor cursor, ArrayList<HashMap<String, String>> dataList)
-    {
-        if (cursor != null)
-        {
+    public void loadDataList(Cursor cursor, ArrayList<HashMap<String, String>> dataList) {
+        if (cursor != null) {
             cursor.moveToFirst();
-            while (!cursor.isAfterLast())
-            {
+            while (!cursor.isAfterLast()) {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put(KEY_ID, cursor.getString(0));
                 hashMap.put(KEY_TASK, cursor.getString(1));
@@ -196,8 +152,7 @@ public class Home extends AppCompatActivity
         }
     }
 
-    public void loadListView(ListView listView, final ArrayList<HashMap<String, String>> dataList)
-    {
+    public void loadListView(ListView listView, final ArrayList<HashMap<String, String>> dataList) {
         TaskListAdapter adapter = new TaskListAdapter(this, dataList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((parent, view, position, id) ->
@@ -208,5 +163,33 @@ public class Home extends AppCompatActivity
             i.putExtra("task", dataList.get(+position).get(KEY_TASK));
             startActivity(i);
         });
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    class LoadTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            taskListHashMap.clear();
+        }
+
+        protected String doInBackground(String... args) {
+            Cursor taskData = taskDbHelper.getData();
+            loadDataList(taskData, taskListHashMap);
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String xml) {
+            loadListView(taskListUpcoming, taskListHashMap);
+            loader.setVisibility(View.GONE);
+            scrollView.setVisibility(View.VISIBLE);
+            tv_windowTitle.setOnLongClickListener(view ->
+            {
+                Snackbar.make(getWindow().getDecorView().getRootView(), "meow", Snackbar.LENGTH_SHORT).show();
+                return true;
+            });
+            if (!taskListHashMap.isEmpty()) getStartedHint.setVisibility(View.GONE);
+        }
     }
 }
