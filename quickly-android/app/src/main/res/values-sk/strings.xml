@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">quickly</string>
+    <string name="btn_addTask">Dokončiť</string>
+    <string name="btn_add_reminder">Pripomienka</string>
+    <string name="btn_attach_files">Pridať súbor/-y</string>
+    <string name="btn_removeTask">Odstrániť úlohu</string>
+    <string name="hint_noTasksAdded">Nič tu nie je.\nZačnite pridaním nejakej úlohy.</string>
+    <string name="hint_quickAddText">Pridať úlohu</string>
+    <string name="hint_taskName">Názov</string>
+    <string name="hint_taskNote">Poznámky (voliteľné)</string>
+    <string name="pref_appTheme_dark">Tmavá</string>
+    <string name="pref_appTheme_light">Svetlá</string>
+    <string name="pref_appTheme_setByBatterySaver">Podľa šetriča batérie (predvolené)</string>
+    <string name="pref_appTheme_systemDefault">Podľa nastavení systému (predvolené)</string>
+    <string name="title_updateTask">Upraviť úlohu</string>
+    <string name="title_noTaskName">Úloha bez názvu</string>
+    <string name="toast_taskRemoved">Úloha bude čoskoro odstránená</string>
+    <string name="pref_desc_about">Navštíviť domovskú stránku aplikácie</string>
+    <string name="pref_desc_appTheme">...and I want it painted black.</string>
+    <string name="pref_desc_archivedTasks">Zobraziť, obnoviť alebo odstrániť archivované úlohy</string>
+    <string name="pref_desc_backup">Zálohovať všetky úlohy do súboru</string>
+    <string name="pref_desc_clearAll">Toto je deštruktívna operácia! Všetky uložené úlohy budú ODSTRÁNENÉ!</string>
+    <string name="pref_desc_connect">Pre zapnutie synchronizácie a paralelných úprav sa prihláste</string>
+    <string name="pref_group_general">Všeobecné</string>
+    <string name="pref_group_noteMgmt">Správa úloh</string>
+    <string name="pref_group_accountsAndSync">Účty &amp; synchronizácia</string>
+    <string name="pref_title_accounts_sync">Povoliť synchronizáciu</string>
+    <string name="pref_title_general_about">O aplikácii quickly</string>
+    <string name="pref_title_general_help">Nápoveda</string>
+    <string name="title_appTheme">Vzhľad aplikácie</string>
+    <string name="title_addTask">Pridať úlohu</string>
+    <string name="title_activity_settings">Nastavenia</string>
+    <string name="task_untitled">Úloha bez názvu</string>
+    <string name="pref_desc_delete">Odstrániť účet z aplikácie a s ním všetky uložené nastavenia, úlohy a súbory.</string>
+    <string name="pref_desc_help">Nič sa neboj! Na (takmer) všetko nájdeš odpoveď :)</string>
+    <string name="pref_desc_restore">Už máte existujúcu zálohu? Kliknutím sem ju importujete.</string>
+    <string name="pref_desc_sync">Synchonizovať úlohy medzi zariadeniami.</string>
+    <string name="pref_desc_thirdPartyNotices">Knižnice tretích strán použité v tejto aplikácii</string>
+    <string name="pref_title_accounts_connect">Prihlásiť sa / vytvoriť účet</string>
+    <string name="pref_title_accounts_delete">Odstrániť váš účet a s ním všetky údaje o ňom</string>
+    <string name="pref_title_general_thirdPartyNotices">Licencie tretích strán</string>
+    <string name="pref_title_noteMgmt_backup">Exportovať do súboru</string>
+    <string name="pref_title_noteMgmt_clearAll">Odstrániť všetky uložené úlohy</string>
+    <string name="pref_title_noteMgmt_restore">Importovať zálohu</string>
+</resources>

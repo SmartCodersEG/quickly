@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import sk.ttomovcik.quickly.R;
 import sk.ttomovcik.quickly.R2;
-import sk.ttomovcik.quickly.db.TaskDbHelper;
+import sk.ttomovcik.quickly.helpers.TaskDbHelper;
 
 public class AddTask extends AppCompatActivity
 {

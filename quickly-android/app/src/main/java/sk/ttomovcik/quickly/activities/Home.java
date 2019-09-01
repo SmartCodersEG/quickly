@@ -33,7 +33,7 @@ import butterknife.OnClick;
 import sk.ttomovcik.quickly.BuildConfig;
 import sk.ttomovcik.quickly.R;
 import sk.ttomovcik.quickly.adapters.TaskListAdapter;
-import sk.ttomovcik.quickly.db.TaskDbHelper;
+import sk.ttomovcik.quickly.helpers.TaskDbHelper;
 import sk.ttomovcik.quickly.views.NoScrollListView;
 
 public class Home extends AppCompatActivity {
@@ -63,18 +63,11 @@ public class Home extends AppCompatActivity {
     // NestedScrollView -> scrollView
     @BindView(R.id.scrollView)
     NestedScrollView scrollView;
-    // TODO: Show random text in the TextInputEditText_AddTask hint thingy.
-    private String[] addTaskHints = new String[]{
-            "Do something amazing",
-            "Remind me to...",
-            "Yes, tap here to add task..",
-            "<insert hint text here>"
-    };
 
     @OnClick(R.id.fab_addTask)
-    void onClick() {
-        Intent intent = new Intent(Home.this, AddTask.class);
-        intent.putExtra("modifyTask", false);
+    void onClickFabAddTask() {
+        Intent intent = new Intent(Home.this, AddTask.class)
+                .putExtra("modifyTask", false);
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
     }
 
