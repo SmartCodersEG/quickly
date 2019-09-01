@@ -58,15 +58,17 @@ The main reason why quickly is here with us, is the lazyness of it's developer. 
 too lazy to find a minimalistic to-do app, so he's made one himself. Right now, this app is in Beta version and onl available on Github.
 Sooner or later, it's gonna be released on Google Play Store.
 
-### Features
+### Dev progress
 * Adding notes 👌
 * (ongoing) Fancy settings UI (who doesn't like that)
+* (ongoing) Reminders
 * (planned) Backup and restore notes
 * (planned) Sync with cloud
 * (planned) Live editing across multiple devices (😋)
 * (planned) Stylus and touch input support
 * (planned) Drop in files
 * (planned) Sharing across apps (from and to quickly)
+* (finished) Dark theme support for Android 10 (and older/newer)
 
 ### Built With
 * [Android Studio](https://developer.android.com/studio)
