@@ -34,19 +34,20 @@
                 tools:ignore="RelativeOverlap" />
 
             <ImageButton
-                android:id="@+id/changeTheme"
+                android:id="@+id/openSettings"
                 style="@style/Widget.Design.FloatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:tint="@color/colorTextSecondary"
                 android:layout_margin="16dp"
                 android:background="@android:color/transparent"
                 android:clickable="true"
                 android:contentDescription="@string/app_name"
                 android:focusable="true"
                 android:padding="8dp"
-                android:src="@drawable/ic_palette_black_24dp" />
+                android:src="@drawable/ic_settings_24dp" />
         </RelativeLayout>
     </com.google.android.material.appbar.MaterialToolbar>
 
@@ -70,8 +71,9 @@
             android:layout_height="64dp"
             android:layout_centerHorizontal="true"
             android:layout_margin="16dp"
+            android:tint="@color/colorTextSecondary"
             android:contentDescription="@string/hint_noTasksAdded"
-            android:src="@drawable/uwu" />
+            android:src="@drawable/ic_playlist_add_24dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -102,6 +104,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -139,7 +142,7 @@
             android:layout_margin="16dp"
             app:backgroundTint="@color/colorFabAddTask"
             app:elevation="4dp"
-            app:icon="@drawable/ic_add_black_24dp"
+            app:icon="@drawable/ic_add_24dp"
             app:iconTint="@color/colorFabIcon"
             app:rippleColor="@color/colorAccent" />
 

@@ -1,33 +1,63 @@
 <resources>
-    <string name="app_name">quickly</string>
-    <string name="app_version">0.1.0-alpha.0</string> <!-- Manually copied from build.gradle :/ -->
+    <string name="app_name" translatable="false">quickly</string>
+    <string name="title_activity_settings">Settings</string>
+    <!-- Manually copied from build.gradle :/ -->
 
-    <string name="btn_setReminder">Reminder</string>
-    <string name="btn_setFinishDate">Finish date</string>
-    <string name="btn_setColor">Color</string>
-    <string name="btn_addTask">Add task</string>
-    <string name="btn_removeTask">Remove</string>
+    <string name="btn_addTask">Finish</string>
+    <string name="btn_removeTask">Delete task</string>
+    <string name="btn_add_reminder">Add reminder</string>
+    <string name="btn_attach_files">Attach file(s)</string>
 
     <string name="title_addTask">Add task</string>
     <string name="title_updateTask">Modify task</string>
     <string name="title_noTaskName">No task name</string>
-    <string name="title_noTaskDate">No finish date set</string>
     <string name="title_appTheme">Application theme</string>
 
     <string name="hint_quickAddText">Do something amazing</string>
     <string name="hint_taskName">Name</string>
-    <string name="hint_taskNote">Additional notes (optional)</string>
+    <string name="hint_taskNote">Additional tasks (optional)</string>
     <string name="hint_noTasksAdded">It\'s pretty empty in here.\nGet started by adding something.</string>
 
     <string name="toast_taskRemoved">Task will be removed soon</string>
 
     <!-- Tasks-->
-    <string name="task_noTaskAdded">No tasks added</string>
-    <string name="task_ntaGetStarted">Get started by adding your task</string>
     <string name="task_untitled">Untitled task</string>
 
     <string name="pref_appTheme_light">Light</string>
     <string name="pref_appTheme_dark">Dark</string>
     <string name="pref_appTheme_systemDefault">Follow system settings (default)</string>
     <string name="pref_appTheme_setByBatterySaver">Set by battery saver (default)</string>
+
+    <!-- Preferences: groups -->
+    <string name="pref_group_general">General</string>
+    <string name="pref_group_accountsAndSync">Accounts &amp; sync</string>
+    <string name="pref_group_noteMgmt">Tasks management</string>
+
+    <!-- Preferences: group: general -->
+    <string name="pref_title_general_thirdPartyNotices">Third-party licences</string>
+    <string name="pref_title_general_help">Help</string>
+    <string name="pref_title_general_about">About quickly</string>
+
+    <!-- Preferences: group: accounts -->
+    <string name="pref_title_accounts_connect">Sign in / create account</string>
+    <string name="pref_title_accounts_sync">Enable sync</string>
+    <string name="pref_title_accounts_delete">Delete your account with all your stored tasks</string>
+
+    <!-- Preferences: group: note management -->
+    <string name="pref_title_noteMgmt_backup">Export to file</string>
+    <string name="pref_title_noteMgmt_restore">Import previous backup</string>
+    <string name="pref_title_noteMgmt_clearAll">Remove all stored tasks</string>
+
+    <!-- Preferences: descriptions -->
+    <string name="pref_desc_appTheme">Join the dark side</string>
+    <string name="pref_desc_thirdPartyNotices">Libraries by third-parties used in this app</string>
+    <string name="pref_desc_help">Don\'t worry little fella. We got you covered :)</string>
+    <string name="pref_desc_about">Visit our website</string>
+    <string name="pref_desc_connect">Sign in to enable sync and live editing</string>
+    <string name="pref_desc_sync">Sync tasks between devices</string>
+    <string name="pref_desc_delete">Remove your account from quickly and all of it\'s stored settings, tasks and files.</string>
+    <string name="pref_desc_backup">Backup all stored tasks from the device to a file</string>
+    <string name="pref_desc_restore">Already got a existing task? Tap to import them</string>
+    <string name="pref_desc_clearAll">THIS IS A DESTRUCTIVE OPERATION! All stored tasks will be removed. BOTH FROM CLOUD AND PHONE!</string>
+    <string name="pref_desc_archivedTasks">View and restore or delete archived tasks</string>
 </resources>

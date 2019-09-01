@@ -11,7 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.AddTask"></activity>
+        <activity
+            android:name=".activities.Settings"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/SettingsTheme" />
+        <activity android:name=".activities.AddTask" />
         <activity android:name=".activities.Home">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

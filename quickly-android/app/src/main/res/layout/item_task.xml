@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Nah, he's not useless. He's a great little LinearLayout! :) -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,15 +20,12 @@
                 android:id="@+id/taskName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_addTask"
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/taskDue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_noTaskDate"
                 android:textColor="@color/colorTextSecondary" />
         </LinearLayout>
     </RelativeLayout>

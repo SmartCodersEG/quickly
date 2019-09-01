@@ -1,4 +1,4 @@
-package sk.ttomovcik.quickly.db;
+package sk.ttomovcik.quickly.helpers;
 
 import android.content.ContentValues;
 import android.content.Context;

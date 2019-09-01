@@ -2,11 +2,8 @@
 <resources>
     <color name="colorPrimary">#607D8B</color>
     <color name="colorPrimaryDark">#455A64</color>
-    <color name="colorPrimaryLight">#CFD8DC</color>
     <color name="colorAccent">#03A9F4</color>
 
-    <color name="colorBtnReminder">#FFE0B2</color>
-    <color name="colorBtnFinishDate">#FFCDD2</color>
     <color name="colorFabAddTask">#212121</color>
     <color name="colorFabDeleteTask">#202020</color>
     <color name="colorListItemBackground">#424242</color>
