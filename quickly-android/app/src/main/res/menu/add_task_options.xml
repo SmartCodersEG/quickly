@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_removeTask"
+        android:title="@string/btn_removeTask"/>
+
+    <item
+        android:id="@+id/action_archiveTask"
+        android:title="@string/btn_archiveTask" />
+</menu>

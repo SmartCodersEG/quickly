@@ -5,6 +5,7 @@
     <string name="btn_add_reminder">Pripomienka</string>
     <string name="btn_attach_files">Pridať súbor/-y</string>
     <string name="btn_removeTask">Odstrániť úlohu</string>
+    <string name="btn_archiveTask">Archivovať úlohu</string>
     <string name="hint_noTasksAdded">Nič tu nie je.\nZačnite pridaním nejakej úlohy.</string>
     <string name="hint_quickAddText">Pridať úlohu</string>
     <string name="hint_taskName">Názov</string>
@@ -15,7 +16,7 @@
     <string name="pref_appTheme_systemDefault">Podľa nastavení systému (predvolené)</string>
     <string name="title_updateTask">Upraviť úlohu</string>
     <string name="title_noTaskName">Úloha bez názvu</string>
-    <string name="toast_taskRemoved">Úloha bude čoskoro odstránená</string>
+    <string name="toast_taskRemoved">Úloha odstránená</string>
     <string name="pref_desc_about">Navštíviť domovskú stránku aplikácie</string>
     <string name="pref_desc_appTheme">...and I want it painted black.</string>
     <string name="pref_desc_archivedTasks">Zobraziť, obnoviť alebo odstrániť archivované úlohy</string>
@@ -38,9 +39,20 @@
     <string name="pref_desc_sync">Synchonizovať úlohy medzi zariadeniami.</string>
     <string name="pref_desc_thirdPartyNotices">Knižnice tretích strán použité v tejto aplikácii</string>
     <string name="pref_title_accounts_connect">Prihlásiť sa / vytvoriť účet</string>
-    <string name="pref_title_accounts_delete">Odstrániť váš účet a s ním všetky údaje o ňom</string>
+    <string name="pref_title_accounts_delete">Odstrániť váš účet</string>
     <string name="pref_title_general_thirdPartyNotices">Licencie tretích strán</string>
     <string name="pref_title_noteMgmt_backup">Exportovať do súboru</string>
     <string name="pref_title_noteMgmt_clearAll">Odstrániť všetky uložené úlohy</string>
     <string name="pref_title_noteMgmt_restore">Importovať zálohu</string>
+    <string name="toast_allTasksRemoved">Všetky úlohy odstránené</string>
+    <string name="dialog_areYouSure">Naozaj?</string>
+    <string name="pref_title_noteMgmt_archivedTasks">Archivované úlohy</string>
+    <string name="btn_action_delete">Odstrániť</string>
+    <string name="btn_action_cancel">Zrušiť</string>
+    <string name="pref_desc_language">Zmeniť predvolený jazyk aplikácie</string>
+    <string name="pref_title_general_language">Jazyk</string>
+    <string name="btn_gotIt">OK</string>
+    <string name="showcase_addTask">Pridajte novú úlohu a nastavte pripomienky a ďalšie údaje</string>
+    <string name="showcase_openSettings">Prispôsobte si quickly</string>
+    <string name="showcase_quicklyAddTaks">Rýchlo pridajte novú úlohu</string>
 </resources>

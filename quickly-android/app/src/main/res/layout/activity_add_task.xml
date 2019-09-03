@@ -51,27 +51,28 @@
             app:alignContent="center"
             app:justifyContent="space_evenly">
 
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_addReminder"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:focusable="false"
                 android:text="@string/btn_add_reminder"
                 android:textColor="@color/colorTextPrimary"
-                app:icon="@drawable/ic_alarm_on_24dp"
-                app:iconTint="@color/colorIcons" />
+                android:drawableTop="@drawable/ic_alarm_on_24dp"
+                android:drawablePadding="16dp"/>
 
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            <androidx.appcompat.widget.AppCompatButton
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:focusable="false"
                 android:text="@string/btn_attach_files"
                 android:textColor="@color/colorTextPrimary"
-                app:icon="@drawable/ic_attach_file_24dp"
-                app:iconTint="@color/colorIcons" />
+                android:drawableTop="@drawable/ic_attach_file_24dp"
+                android:drawablePadding="16dp"/>
 
         </com.google.android.flexbox.FlexboxLayout>
 
@@ -95,7 +96,7 @@
             android:id="@+id/taskNote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/fab_deleteTask"
+            android:layout_above="@id/fab_addTask"
             android:layout_margin="16dp"
             android:drawablePadding="8dp"
             android:hint="@string/hint_taskNote"
@@ -116,18 +117,5 @@
             app:icon="@drawable/ic_done_24dp"
             app:iconTint="@color/colorFabIcon"
             tools:ignore="RelativeOverlap" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fab_deleteTask"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="16dp"
-            android:text="@string/btn_removeTask"
-            android:textColor="@color/colorTextSecondary"
-            app:backgroundTint="@color/colorFabDeleteTask"
-            app:icon="@drawable/ic_delete_forever_24dp"
-            app:iconTint="@color/colorTextSecondary" />
     </RelativeLayout>
 </RelativeLayout>
