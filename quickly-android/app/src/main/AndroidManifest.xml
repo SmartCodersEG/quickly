@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="sk.ttomovcik.quickly">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

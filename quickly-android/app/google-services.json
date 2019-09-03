@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "264316887054",
+    "firebase_url": "https://quickly-app-v1.firebaseio.com",
+    "project_id": "quickly-app-v1",
+    "storage_bucket": "quickly-app-v1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:264316887054:android:cee3c7eb833f6225",
+        "android_client_info": {
+          "package_name": "sk.ttomovcik.quickly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "264316887054-ab43hqrn9hsjbm102piua9qt8krvvuac.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwgsj9t8wMDRw3sZPWVNrx0CForX70Tsk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "264316887054-ab43hqrn9hsjbm102piua9qt8krvvuac.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

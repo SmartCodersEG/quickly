@@ -5,10 +5,8 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -96,12 +94,9 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         SharedPreferences sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
-        int storedTheme = sharedPref.getInt("appTheme", 0);
-        if (storedTheme == 2)
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-
+        int appTheme = sharedPref.getInt("appTheme", 0);
+        if (appTheme == 2) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         initQuickAddTask();
@@ -151,15 +146,15 @@ public class Home extends AppCompatActivity {
     }
 
     private void initShowcase() {
-        ShowcaseConfig config = new ShowcaseConfig();
-        config.setDelay(500);
-        config.setMaskColor(ContextCompat.getColor(this, R.color.colorShowcase));
-        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "firstRunShowcase");
-        sequence.setConfig(config);
-        sequence.addSequenceItem(textInputEditTextAddTask, getString(R.string.showcase_quicklyAddTaks), getString(R.string.btn_gotIt));
-        sequence.addSequenceItem(fab_addTask, getString(R.string.showcase_addTask), getString(R.string.btn_gotIt));
-        sequence.addSequenceItem(imgBtn_openSettings, getString(R.string.showcase_openSettings), getString(R.string.btn_gotIt));
-        sequence.start();
+        ShowcaseConfig showcaseConfig = new ShowcaseConfig();
+        showcaseConfig.setDelay(500);
+        showcaseConfig.setMaskColor(ContextCompat.getColor(this, R.color.colorShowcase));
+        MaterialShowcaseSequence msq = new MaterialShowcaseSequence(this, "seqId");
+        msq.setConfig(showcaseConfig);
+        msq.addSequenceItem(textInputEditTextAddTask, getString(R.string.showcase_quicklyAddTaks), getString(R.string.btn_gotIt));
+        msq.addSequenceItem(fab_addTask, getString(R.string.showcase_addTask), getString(R.string.btn_gotIt));
+        msq.addSequenceItem(imgBtn_openSettings, getString(R.string.showcase_openSettings), getString(R.string.btn_gotIt));
+        msq.start();
     }
 
     public void loadDataList(Cursor cursor, ArrayList<HashMap<String, String>> dataList) {
