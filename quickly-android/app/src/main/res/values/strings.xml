@@ -1,12 +1,17 @@
 <resources>
     <string name="app_name" translatable="false">quickly</string>
     <string name="title_activity_settings">Settings</string>
-    <!-- Manually copied from build.gradle :/ -->
+
+    <string name="aboutLibraries_description_text" translatable="false">Minimalistic note-taking app for Android</string>
 
     <string name="btn_addTask">Finish</string>
     <string name="btn_removeTask">Delete task</string>
+    <string name="btn_archiveTask">Archive task</string>
     <string name="btn_add_reminder">Add reminder</string>
     <string name="btn_attach_files">Attach file(s)</string>
+    <string name="btn_action_cancel">Cancel</string>
+    <string name="btn_action_delete">Delete</string>
+    <string name="btn_gotIt">GOT IT!</string>
 
     <string name="title_addTask">Add task</string>
     <string name="title_updateTask">Modify task</string>
@@ -18,7 +23,14 @@
     <string name="hint_taskNote">Additional tasks (optional)</string>
     <string name="hint_noTasksAdded">It\'s pretty empty in here.\nGet started by adding something.</string>
 
-    <string name="toast_taskRemoved">Task will be removed soon</string>
+    <string name="showcase_quicklyAddTaks">Quickly add new tasks</string>
+    <string name="showcase_addTask">Add new task with more details and reminders</string>
+    <string name="showcase_openSettings">Customize this.. quickly..</string>
+
+    <string name="dialog_areYouSure">Are you sure?</string>
+
+    <string name="toast_taskRemoved">Task removed</string>
+    <string name="toast_allTasksRemoved">All tasks removed</string>
 
     <!-- Tasks-->
     <string name="task_untitled">Untitled task</string>
@@ -34,6 +46,7 @@
     <string name="pref_group_noteMgmt">Tasks management</string>
 
     <!-- Preferences: group: general -->
+    <string name="pref_title_general_language">Language</string>
     <string name="pref_title_general_thirdPartyNotices">Third-party licences</string>
     <string name="pref_title_general_help">Help</string>
     <string name="pref_title_general_about">About quickly</string>
@@ -41,12 +54,13 @@
     <!-- Preferences: group: accounts -->
     <string name="pref_title_accounts_connect">Sign in / create account</string>
     <string name="pref_title_accounts_sync">Enable sync</string>
-    <string name="pref_title_accounts_delete">Delete your account with all your stored tasks</string>
+    <string name="pref_title_accounts_delete">Delete your account</string>
 
     <!-- Preferences: group: note management -->
     <string name="pref_title_noteMgmt_backup">Export to file</string>
     <string name="pref_title_noteMgmt_restore">Import previous backup</string>
     <string name="pref_title_noteMgmt_clearAll">Remove all stored tasks</string>
+    <string name="pref_title_noteMgmt_archivedTasks">Archived tasks</string>
 
     <!-- Preferences: descriptions -->
     <string name="pref_desc_appTheme">Join the dark side</string>
@@ -60,4 +74,5 @@
     <string name="pref_desc_restore">Already got a existing task? Tap to import them</string>
     <string name="pref_desc_clearAll">THIS IS A DESTRUCTIVE OPERATION! All stored tasks will be removed. BOTH FROM CLOUD AND PHONE!</string>
     <string name="pref_desc_archivedTasks">View and restore or delete archived tasks</string>
+    <string name="pref_desc_language">Change application display language</string>
 </resources>

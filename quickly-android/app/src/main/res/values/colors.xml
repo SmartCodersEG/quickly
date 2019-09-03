@@ -9,11 +9,11 @@
     <color name="colorFabAddTask">#03A9F4</color>
     <color name="colorFabDeleteTask">#ECECEC</color>
     <color name="colorListItemBackground">#FCFCFC</color>
+    <color name="colorShowcase">#CC03A9F4</color>
 
     <!-- Text, dividers, icons -->
     <color name="colorTextPrimary">#212121</color>
     <color name="colorTextSecondary">#757575</color>
     <color name="colorWindowBackground">#F5F5F5</color>
-    <color name="colorIcons">#000000</color>
     <color name="colorFabIcon">#FFFFFF</color>
 </resources>

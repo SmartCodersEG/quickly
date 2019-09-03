@@ -5,12 +5,14 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -18,8 +20,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -35,14 +39,17 @@ import sk.ttomovcik.quickly.R;
 import sk.ttomovcik.quickly.adapters.TaskListAdapter;
 import sk.ttomovcik.quickly.helpers.TaskDbHelper;
 import sk.ttomovcik.quickly.views.NoScrollListView;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class Home extends AppCompatActivity {
+
     public static String KEY_ID = "id";
     public static String KEY_TASK = "task";
 
-    // TextInputEditText -> TextInputEditText_AddTask
+    // TextInputEditText -> textInputEditTextAddTask
     @BindView(R.id.addTask)
-    TextInputEditText TextInputEditText_AddTask;
+    TextInputEditText textInputEditTextAddTask;
 
     TaskDbHelper taskDbHelper;
     ArrayList<HashMap<String, String>> taskListHashMap = new ArrayList<>();
@@ -64,6 +71,15 @@ public class Home extends AppCompatActivity {
     @BindView(R.id.scrollView)
     NestedScrollView scrollView;
 
+    // Open settings button
+    @BindView(R.id.openSettings)
+    ImageButton imgBtn_openSettings;
+
+    // Add task FAB
+    @BindView(R.id.fab_addTask)
+    ExtendedFloatingActionButton fab_addTask;
+
+
     @OnClick(R.id.fab_addTask)
     void onClickFabAddTask() {
         Intent intent = new Intent(Home.this, AddTask.class)
@@ -80,14 +96,16 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         SharedPreferences sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
         int storedTheme = sharedPref.getInt("appTheme", 0);
-        Log.i("themeManager", String.valueOf(storedTheme));
         if (storedTheme == 2)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         initQuickAddTask();
+        initShowcase();
     }
 
     @Override
@@ -115,21 +133,33 @@ public class Home extends AppCompatActivity {
     }
 
     private void initQuickAddTask() {
-        TextInputEditText_AddTask.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        TextInputEditText_AddTask.setOnEditorActionListener((v, actionId, event) ->
+        textInputEditTextAddTask.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        textInputEditTextAddTask.setOnEditorActionListener((v, actionId, event) ->
         {
             if (event != null && event.getKeyCode()
                     == KeyEvent.KEYCODE_ENTER
                     || actionId == EditorInfo.IME_ACTION_DONE) {
                 TaskDbHelper taskDbHelper = new TaskDbHelper(this);
-                String _taskName = String.valueOf(TextInputEditText_AddTask.getText());
+                String _taskName = String.valueOf(textInputEditTextAddTask.getText());
                 taskDbHelper.addTask(_taskName, "", "", "", "");
-                Objects.requireNonNull(TextInputEditText_AddTask.getText()).clear();
+                Objects.requireNonNull(textInputEditTextAddTask.getText()).clear();
                 populateData();
                 return true;
             }
             return false;
         });
+    }
+
+    private void initShowcase() {
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(500);
+        config.setMaskColor(ContextCompat.getColor(this, R.color.colorShowcase));
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "firstRunShowcase");
+        sequence.setConfig(config);
+        sequence.addSequenceItem(textInputEditTextAddTask, getString(R.string.showcase_quicklyAddTaks), getString(R.string.btn_gotIt));
+        sequence.addSequenceItem(fab_addTask, getString(R.string.showcase_addTask), getString(R.string.btn_gotIt));
+        sequence.addSequenceItem(imgBtn_openSettings, getString(R.string.showcase_openSettings), getString(R.string.btn_gotIt));
+        sequence.start();
     }
 
     public void loadDataList(Cursor cursor, ArrayList<HashMap<String, String>> dataList) {
