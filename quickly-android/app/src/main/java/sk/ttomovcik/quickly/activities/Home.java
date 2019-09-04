@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -129,20 +130,22 @@ public class Home extends AppCompatActivity {
 
     private void initQuickAddTask() {
         textInputEditTextAddTask.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        textInputEditTextAddTask.setOnEditorActionListener((v, actionId, event) ->
-        {
-            if (event != null && event.getKeyCode()
-                    == KeyEvent.KEYCODE_ENTER
-                    || actionId == EditorInfo.IME_ACTION_DONE) {
-                TaskDbHelper taskDbHelper = new TaskDbHelper(this);
-                String _taskName = String.valueOf(textInputEditTextAddTask.getText());
-                taskDbHelper.addTask(_taskName, "", "", "", "");
-                Objects.requireNonNull(textInputEditTextAddTask.getText()).clear();
-                populateData();
+        textInputEditTextAddTask.setOnEditorActionListener((v, id, event) -> {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                    (id == KeyEvent.ACTION_DOWN)) {
+                quickStoreTask();
                 return true;
             }
             return false;
         });
+    }
+
+    private void quickStoreTask() {
+        TaskDbHelper taskDbHelper = new TaskDbHelper(this);
+        String _taskName = String.valueOf(textInputEditTextAddTask.getText());
+        taskDbHelper.addTask(_taskName, "", "", "", "");
+        Objects.requireNonNull(textInputEditTextAddTask.getText()).clear();
+        populateData();
     }
 
     private void initShowcase() {
