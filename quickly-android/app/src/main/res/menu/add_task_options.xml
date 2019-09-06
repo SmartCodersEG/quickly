@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/action_removeTask"
-        android:title="@string/btn_removeTask"/>
+        android:title="@string/btn_removeTask" />
 
     <item
         android:id="@+id/action_archiveTask"

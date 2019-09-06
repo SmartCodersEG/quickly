@@ -37,7 +37,7 @@
         <Preference
             app:enabled="false"
             app:icon="@drawable/ic_save_24dp"
-            app:key="exportNotesFromDb"
+            app:key="exportDb"
             app:summary="@string/pref_desc_backup"
             app:title="@string/pref_title_noteMgmt_backup" />
 

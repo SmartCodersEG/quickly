@@ -8,24 +8,21 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import sk.ttomovcik.quickly.BuildConfig;
 
-public class TaskDbHelper extends SQLiteOpenHelper
-{
+public class TaskDbHelper extends SQLiteOpenHelper {
 
-    private static final String DB_NAME = BuildConfig.APPLICATION_ID + ".todo.db";
+    private static final String DB_NAME = "tasks.db";
     private static final String DB_TABLE = "todo";
     private static final int DB_VERSION = 1;
 
     /**
      * @param ctx Context
      */
-    public TaskDbHelper(Context ctx)
-    {
+    public TaskDbHelper(Context ctx) {
         super(ctx, DB_NAME, null, DB_VERSION);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqlDb)
-    {
+    public void onCreate(SQLiteDatabase sqlDb) {
         sqlDb.execSQL("CREATE TABLE " + DB_TABLE +
                 "(id INTEGER PRIMARY KEY," +
                 " taskName TEXT," +
@@ -36,8 +33,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqlDb, int i, int i1)
-    {
+    public void onUpgrade(SQLiteDatabase sqlDb, int i, int i1) {
         sqlDb.execSQL("DROP TABLE IF EXISTS " + DB_TABLE);
         onCreate(sqlDb);
     }
@@ -50,8 +46,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
      * @param taskReminder   reminder. will be set with alarm after saving
      */
     public void addTask(String taskName, String taskNote, String taskColor,
-                        String taskFinishDate, String taskReminder)
-    {
+                        String taskFinishDate, String taskReminder) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("taskName", taskName);
@@ -70,8 +65,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
      * @param taskReminder   reminder. will be set with alarm after saving
      */
     public void updateTask(String id, String taskName, String taskNote, String taskColor,
-                           String taskFinishDate, String taskReminder)
-    {
+                           String taskFinishDate, String taskReminder) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("taskName", taskName);
@@ -82,21 +76,18 @@ public class TaskDbHelper extends SQLiteOpenHelper
         db.update(DB_TABLE, contentValues, "id = ? ", new String[]{id});
     }
 
-    public void deleteTask(String id)
-    {
+    public void deleteTask(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(DB_TABLE, "ID=?", new String[]{id});
     }
 
-    public Cursor getData()
-    {
+    public Cursor getData() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("select * from " + DB_TABLE
                 + " order by id desc", null);
     }
 
-    public Cursor getDataFromId(String id)
-    {
+    public Cursor getDataFromId(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("select * from " + DB_TABLE
                 + " WHERE id = '" + id

@@ -1,20 +1,23 @@
 package sk.ttomovcik.quickly.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -29,6 +33,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -42,49 +47,42 @@ import sk.ttomovcik.quickly.views.NoScrollListView;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
-public class Home extends AppCompatActivity {
+public class Home
+        extends AppCompatActivity
+        implements SwipeRefreshLayout.OnRefreshListener {
 
     public static String KEY_ID = "id";
     public static String KEY_TASK = "task";
 
-    // TextInputEditText -> textInputEditTextAddTask
+    ArrayList<HashMap<String, String>> taskListHashMap = new ArrayList<>();
+    TaskDbHelper taskDbHelper;
+    MaterialShowcaseSequence mSSeq;
+    ShowcaseConfig scCfg;
+    SharedPreferences sharedPref;
+    TaskListAdapter adapter;
+
     @BindView(R.id.addTask)
     TextInputEditText textInputEditTextAddTask;
-
-    TaskDbHelper taskDbHelper;
-    ArrayList<HashMap<String, String>> taskListHashMap = new ArrayList<>();
     @BindView(R.id.title)
     TextView tv_windowTitle;
-
-    // NoScrollListView -> taskListUpcoming
     @BindView(R.id.taskList)
-    NoScrollListView taskListUpcoming;
-
-    // Progressbar -> loader
-    @BindView(R.id.loader)
-    ProgressBar loader;
-
+    NoScrollListView nsvTaskList;
     @BindView(R.id.getStartedHint)
-    RelativeLayout getStartedHint;
-
-    // NestedScrollView -> scrollView
+    RelativeLayout hintLayout;
     @BindView(R.id.scrollView)
-    NestedScrollView scrollView;
-
-    // Open settings button
+    NestedScrollView nestedScrollView;
     @BindView(R.id.openSettings)
     ImageButton imgBtn_openSettings;
-
-    // Add task FAB
     @BindView(R.id.fab_addTask)
     ExtendedFloatingActionButton fab_addTask;
-
+    @BindView(R.id.reloadTasks)
+    SwipeRefreshLayout reloadTasks;
 
     @OnClick(R.id.fab_addTask)
     void onClickFabAddTask() {
-        Intent intent = new Intent(Home.this, AddTask.class)
-                .putExtra("modifyTask", false);
-        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
+        startActivity(new Intent(Home.this, AddTask.class)
+                        .putExtra("modifyTask", false),
+                ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
     }
 
     @OnClick(R.id.openSettings)
@@ -97,24 +95,45 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
-        int storedTheme = sharedPref.getInt("appTheme", 0);
-        if (storedTheme == 2)
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
 
+        int appTheme = sharedPref.getInt("appTheme", 0);
+        String appLang = sharedPref.getString("appLang", "en");
+
+        if (appTheme == 2) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+
+        setLocale(appLang);
         setContentView(R.layout.activity_home);
+
+        tv_windowTitle.setOnLongClickListener(view ->
+        {
+            Snackbar.make(getWindow().getDecorView().getRootView(), "meow", Snackbar.LENGTH_SHORT).show();
+            return true;
+        });
+
         ButterKnife.bind(this);
-        initQuickAddTask();
-        initShowcase();
+        initShowcase(this, this);
+        taskDbHelper = new TaskDbHelper(this);
+        reloadTasks.setOnRefreshListener(this);
+
+        runOnUiThread(() -> {
+            textInputEditTextAddTask.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+            textInputEditTextAddTask.setOnEditorActionListener((v, id, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (id == KeyEvent.ACTION_DOWN)) {
+                    quickStoreTask();
+                    return true;
+                }
+                return false;
+            });
+        });
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        SharedPreferences sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt("appTheme", AppCompatDelegate.getDefaultNightMode());
-        editor.apply();
     }
 
     @Override
@@ -123,43 +142,36 @@ public class Home extends AppCompatActivity {
         populateData();
     }
 
+    @Override
+    public void onRefresh() {
+        populateData();
+        new Handler().postDelayed(() -> reloadTasks.setRefreshing(false), 500);
+    }
+
     private void populateData() {
-        taskDbHelper = new TaskDbHelper(this);
-        scrollView.setVisibility(View.GONE);
-        loader.setVisibility(View.VISIBLE);
-        getStartedHint.setVisibility(View.VISIBLE);
+        nestedScrollView.setVisibility(View.GONE);
+        hintLayout.setVisibility(View.VISIBLE);
         LoadTask loadTask = new LoadTask();
         loadTask.execute();
     }
 
-    private void initQuickAddTask() {
-        textInputEditTextAddTask.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        textInputEditTextAddTask.setOnEditorActionListener((v, actionId, event) ->
-        {
-            if (event != null && event.getKeyCode()
-                    == KeyEvent.KEYCODE_ENTER
-                    || actionId == EditorInfo.IME_ACTION_DONE) {
-                TaskDbHelper taskDbHelper = new TaskDbHelper(this);
-                String _taskName = String.valueOf(textInputEditTextAddTask.getText());
-                taskDbHelper.addTask(_taskName, "", "", "", "");
-                Objects.requireNonNull(textInputEditTextAddTask.getText()).clear();
-                populateData();
-                return true;
-            }
-            return false;
-        });
+    private void quickStoreTask() {
+        String _taskName = String.valueOf(textInputEditTextAddTask.getText());
+        taskDbHelper.addTask(_taskName, "", "", "", "");
+        Objects.requireNonNull(textInputEditTextAddTask.getText()).clear();
+        populateData();
     }
 
-    private void initShowcase() {
-        ShowcaseConfig config = new ShowcaseConfig();
-        config.setDelay(500);
-        config.setMaskColor(ContextCompat.getColor(this, R.color.colorShowcase));
-        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "firstRunShowcase");
-        sequence.setConfig(config);
-        sequence.addSequenceItem(textInputEditTextAddTask, getString(R.string.showcase_quicklyAddTaks), getString(R.string.btn_gotIt));
-        sequence.addSequenceItem(fab_addTask, getString(R.string.showcase_addTask), getString(R.string.btn_gotIt));
-        sequence.addSequenceItem(imgBtn_openSettings, getString(R.string.showcase_openSettings), getString(R.string.btn_gotIt));
-        sequence.start();
+    private void initShowcase(Context mCtx, Activity activity) {
+        mSSeq = new MaterialShowcaseSequence(activity, "seqId");
+        scCfg = new ShowcaseConfig();
+        scCfg.setDelay(500);
+        scCfg.setMaskColor(ContextCompat.getColor(mCtx, R.color.colorShowcase));
+        mSSeq.setConfig(scCfg);
+        mSSeq.addSequenceItem(textInputEditTextAddTask, getString(R.string.showcase_quicklyAddTaks), getString(R.string.btn_gotIt));
+        mSSeq.addSequenceItem(fab_addTask, getString(R.string.showcase_addTask), getString(R.string.btn_gotIt));
+        mSSeq.addSequenceItem(imgBtn_openSettings, getString(R.string.showcase_openSettings), getString(R.string.btn_gotIt));
+        mSSeq.start();
     }
 
     public void loadDataList(Cursor cursor, ArrayList<HashMap<String, String>> dataList) {
@@ -176,16 +188,22 @@ public class Home extends AppCompatActivity {
     }
 
     public void loadListView(ListView listView, final ArrayList<HashMap<String, String>> dataList) {
-        TaskListAdapter adapter = new TaskListAdapter(this, dataList);
+        adapter = new TaskListAdapter(this, dataList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((parent, view, position, id) ->
-        {
-            Intent i = new Intent(this, AddTask.class);
-            i.putExtra("modifyTask", true);
-            i.putExtra("id", dataList.get(+position).get(KEY_ID));
-            i.putExtra("task", dataList.get(+position).get(KEY_TASK));
-            startActivity(i);
-        });
+                startActivity(new Intent(this, AddTask.class)
+                        .putExtra("modifyTask", true)
+                        .putExtra("id", dataList.get(+position).get(KEY_ID))
+                        .putExtra("task", dataList.get(+position).get(KEY_TASK))));
+    }
+
+    private void setLocale(String lang) {
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -204,15 +222,9 @@ public class Home extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String xml) {
-            loadListView(taskListUpcoming, taskListHashMap);
-            loader.setVisibility(View.GONE);
-            scrollView.setVisibility(View.VISIBLE);
-            tv_windowTitle.setOnLongClickListener(view ->
-            {
-                Snackbar.make(getWindow().getDecorView().getRootView(), "meow", Snackbar.LENGTH_SHORT).show();
-                return true;
-            });
-            if (!taskListHashMap.isEmpty()) getStartedHint.setVisibility(View.GONE);
+            loadListView(nsvTaskList, taskListHashMap);
+            nestedScrollView.setVisibility(View.VISIBLE);
+            if (!taskListHashMap.isEmpty()) hintLayout.setVisibility(View.GONE);
         }
     }
 }

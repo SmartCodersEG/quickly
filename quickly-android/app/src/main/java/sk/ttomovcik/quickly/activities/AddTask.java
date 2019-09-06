@@ -1,23 +1,20 @@
 package sk.ttomovcik.quickly.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.ScrollingMovementMethod;
 import android.transition.Slide;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -53,8 +50,6 @@ public class AddTask extends AppCompatActivity {
     TextInputEditText taskNoteBox;
     @BindView(R2.id.fab_addTask)
     ExtendedFloatingActionButton addTask;
-    @BindView(R.id.btn_addReminder)
-    AppCompatButton btn_addReminder;
 
     @OnClick(R2.id.fab_addTask)
     void onClickAddOrModify() {
@@ -72,11 +67,6 @@ public class AddTask extends AppCompatActivity {
         id = intent.getStringExtra("id");
         modifyTask = intent.getBooleanExtra("modifyTask", false);
 
-        // Prepare onClick listeners
-        btn_addReminder.setOnClickListener(view -> {
-            Log.d("quickly.AddTask", "uwu im sowwy this is not wowkin :/");
-        });
-
         // Add toolbar stuff
         setSupportActionBar(materialToolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle(null);
@@ -85,6 +75,8 @@ public class AddTask extends AppCompatActivity {
 
         taskDbHelper = new TaskDbHelper(this);
         if (modifyTask) setModifyTask();
+
+        // TODO: Set max height
         displayTaskName();
     }
 
@@ -168,6 +160,7 @@ public class AddTask extends AppCompatActivity {
         taskNameBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                tvTaskName.setMovementMethod(ScrollingMovementMethod.getInstance());
             }
 
             @Override
@@ -199,22 +192,5 @@ public class AddTask extends AppCompatActivity {
 
     private boolean isEmpty(String string) {
         return string == null || string.length() == 0;
-    }
-
-    /**
-     * @param action Set target action.
-     *               0: create
-     *               1: modify
-     *               2: delete
-     */
-    private void addOrModifyReminders(int action) {
-        switch (action) {
-            case 0:
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-        }
     }
 }
