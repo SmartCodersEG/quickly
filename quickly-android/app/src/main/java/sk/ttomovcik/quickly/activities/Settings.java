@@ -1,5 +1,6 @@
 package sk.ttomovcik.quickly.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -31,8 +32,11 @@ import sk.ttomovcik.quickly.R;
 public class Settings extends AppCompatActivity {
 
     static int ANDROID_API_VERSION = Build.VERSION.SDK_INT;
-    SharedPreferences sharedPref;
+    SharedPreferences preferences;
+    static SharedPreferences.Editor edit;
 
+
+    @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +49,11 @@ public class Settings extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
         }
+
+
+        preferences = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
+        edit = preferences.edit();
     }
 
     @Override
@@ -55,7 +62,6 @@ public class Settings extends AppCompatActivity {
             finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -64,7 +70,13 @@ public class Settings extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
+            Preference _help = findPreference("help");
+            Preference _thirdParty = findPreference("thirdParty");
+            Preference _about = findPreference("about");
             Preference _appTheme = findPreference("appTheme");
+            Preference _language = findPreference("language");
+            Preference _clearAll = findPreference("clearAll");
+
             Objects.requireNonNull(_appTheme).setOnPreferenceClickListener(preference ->
             {
                 String[] APP_THEMES_PRE_Q = {getString(R.string.pref_appTheme_setByBatterySaver), getString(R.string.pref_appTheme_light), getString(R.string.pref_appTheme_dark)};
@@ -78,12 +90,18 @@ public class Settings extends AppCompatActivity {
                     switch (which) {
                         case 0: // Set by battery saver or system default
                             applyTheme(0);
+                            edit.putInt("appTheme", 0).apply();
+                            edit.apply();
                             break;
                         case 1: // Light theme
                             applyTheme(1);
+                            edit.putInt("appTheme", 1).apply();
+                            edit.apply();
                             break;
                         case 2: // Dark theme
                             applyTheme(2);
+                            edit.putInt("appTheme", 2).apply();
+                            edit.apply();
                             break;
                     }
                 });
@@ -92,7 +110,6 @@ public class Settings extends AppCompatActivity {
                 return false;
             });
 
-            Preference _help = findPreference("help");
             Objects.requireNonNull(_help).setOnPreferenceClickListener(preference ->
             {
                 startActivity(new Intent(Intent.ACTION_VIEW,
@@ -100,7 +117,6 @@ public class Settings extends AppCompatActivity {
                 return false;
             });
 
-            Preference _thirdParty = findPreference("thirdParty");
             Objects.requireNonNull(_thirdParty).setOnPreferenceClickListener(preference ->
             {
                 new LibsBuilder()
@@ -114,7 +130,6 @@ public class Settings extends AppCompatActivity {
                 return false;
             });
 
-            Preference _about = findPreference("about");
             Objects.requireNonNull(_about).setOnPreferenceClickListener(preference ->
             {
                 startActivity(new Intent(Intent.ACTION_VIEW,
@@ -122,7 +137,6 @@ public class Settings extends AppCompatActivity {
                 return false;
             });
 
-            Preference _clearAll = findPreference("clearAll");
             Objects.requireNonNull(_clearAll).setOnPreferenceClickListener(preference ->
             {
                 // Creates empty task after deleting DB.
@@ -140,7 +154,6 @@ public class Settings extends AppCompatActivity {
                 return false;
             });
 
-            Preference _language = findPreference("language");
             Objects.requireNonNull(_language).setOnPreferenceClickListener(preference ->
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
@@ -148,9 +161,11 @@ public class Settings extends AppCompatActivity {
                     switch (which) {
                         case 0: // English
                             setLocale("en");
+                            edit.putString("appLang", "en").apply();
                             break;
                         case 1: // Slovak
                             setLocale("sk");
+                            edit.putString("appLang", "sk").apply();
                             break;
                     }
                 });
@@ -158,6 +173,17 @@ public class Settings extends AppCompatActivity {
                 dialog.show();
                 return false;
             });
+        }
+
+        private void setLocale(String lang) {
+            Locale myLocale = new Locale(lang);
+            Resources res = getResources();
+            DisplayMetrics dm = res.getDisplayMetrics();
+            Configuration conf = res.getConfiguration();
+            conf.locale = myLocale;
+            res.updateConfiguration(conf, dm);
+            Intent refresh = new Intent(getActivity(), Home.class);
+            startActivity(refresh);
         }
 
         private void applyTheme(int themeId) {
@@ -175,18 +201,6 @@ public class Settings extends AppCompatActivity {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     break;
             }
-        }
-
-
-        private void setLocale(String lang) {
-            Locale myLocale = new Locale(lang);
-            Resources res = getResources();
-            DisplayMetrics dm = res.getDisplayMetrics();
-            Configuration conf = res.getConfiguration();
-            conf.locale = myLocale;
-            res.updateConfiguration(conf, dm);
-            Intent refresh = new Intent(getActivity(), Home.class);
-            startActivity(refresh);
         }
     }
 }

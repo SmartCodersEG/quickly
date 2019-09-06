@@ -29,6 +29,8 @@
 
     <string name="dialog_areYouSure">Are you sure?</string>
 
+    <string name="qs_addTaskLongTitle">Create new task</string>
+
     <string name="toast_taskRemoved">Task removed</string>
     <string name="toast_allTasksRemoved">All tasks removed</string>
 

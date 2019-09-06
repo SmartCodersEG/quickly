@@ -1,0 +1,13 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_playlist_add_24dp"
+        android:shortcutId="addTasl"
+        android:shortcutLongLabel="@string/qs_addTaskLongTitle"
+        android:shortcutShortLabel="@string/title_addTask">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="sk.ttomovcik.quickly.activities.AddTask"
+            android:targetPackage="sk.ttomovcik.quickly" />
+    </shortcut>
+</shortcuts>
