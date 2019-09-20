@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -95,39 +96,26 @@ public class Home
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // init settings
         sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
-
-        int appTheme = sharedPref.getInt("appTheme", 0);
-        String appLang = sharedPref.getString("appLang", "en");
-
-        if (appTheme == 2) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
-
-        setLocale(appLang);
+        initAppUI();
         setContentView(R.layout.activity_home);
-
-        tv_windowTitle.setOnLongClickListener(view ->
-        {
-            Snackbar.make(getWindow().getDecorView().getRootView(), "meow", Snackbar.LENGTH_SHORT).show();
-            return true;
-        });
-
         ButterKnife.bind(this);
         initShowcase(this, this);
+
+        // load stored tasks and init textInput for new tasks
         taskDbHelper = new TaskDbHelper(this);
         reloadTasks.setOnRefreshListener(this);
-
-        runOnUiThread(() -> {
-            textInputEditTextAddTask.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-            textInputEditTextAddTask.setOnEditorActionListener((v, id, event) -> {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (id == KeyEvent.ACTION_DOWN)) {
-                    quickStoreTask();
-                    return true;
-                }
-                return false;
-            });
+        textInputEditTextAddTask.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        textInputEditTextAddTask.setOnEditorActionListener((v, id, event) -> {
+            boolean handled = false;
+            if (event != null && event.getKeyCode()
+                    == KeyEvent.KEYCODE_ENTER
+                    || id == EditorInfo.IME_ACTION_DONE) {
+                quickStoreTask();
+                handled = true;
+            }
+            return handled;
         });
     }
 
@@ -148,18 +136,34 @@ public class Home
         new Handler().postDelayed(() -> reloadTasks.setRefreshing(false), 500);
     }
 
+    private void initAppUI() {
+        int appTheme = sharedPref.getInt("appTheme", 0);
+        if (appTheme == 2) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            setLocale(sharedPref.getString("appLang", String.valueOf(this.getResources()
+                    .getConfiguration().getLocales().get(0))));
+        }
+    }
+
+    private boolean isEmpty(String string) {
+        return string == null || string.length() == 0;
+    }
+
     private void populateData() {
         nestedScrollView.setVisibility(View.GONE);
-        hintLayout.setVisibility(View.VISIBLE);
         LoadTask loadTask = new LoadTask();
         loadTask.execute();
     }
 
     private void quickStoreTask() {
         String _taskName = String.valueOf(textInputEditTextAddTask.getText());
-        taskDbHelper.addTask(_taskName, "", "", "", "");
-        Objects.requireNonNull(textInputEditTextAddTask.getText()).clear();
-        populateData();
+        if (isEmpty(_taskName)) {
+            Snackbar.make(getWindow().getDecorView().getRootView(), "No task name", Snackbar.LENGTH_SHORT);
+        } else {
+            taskDbHelper.addTask(_taskName, "", "", "", "");
+            Objects.requireNonNull(textInputEditTextAddTask.getText()).clear();
+            populateData();
+        }
     }
 
     private void initShowcase(Context mCtx, Activity activity) {
@@ -174,6 +178,7 @@ public class Home
         mSSeq.start();
     }
 
+    //
     public void loadDataList(Cursor cursor, ArrayList<HashMap<String, String>> dataList) {
         if (cursor != null) {
             cursor.moveToFirst();

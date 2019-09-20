@@ -146,8 +146,7 @@ public class Settings extends AppCompatActivity {
                         .setMessage("Are you sure you want to close without saving this task?")
                         .setNegativeButton(getString(R.string.btn_action_cancel), null)
                         .setPositiveButton(getString(R.string.btn_action_delete), (dialog, id) -> {
-                            String DB_NAME = BuildConfig.APPLICATION_ID + ".todo.db";
-                            Objects.requireNonNull(getContext()).deleteDatabase(DB_NAME);
+                            Objects.requireNonNull(getContext()).deleteDatabase("tasks.db");
                             Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content),
                                     getString(R.string.toast_allTasksRemoved), Snackbar.LENGTH_SHORT).show();
                         }).show();

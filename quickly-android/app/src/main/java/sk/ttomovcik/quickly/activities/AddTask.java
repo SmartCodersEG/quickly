@@ -82,7 +82,9 @@ public class AddTask extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add_task_options, menu);
+        if (modifyTask) {
+            getMenuInflater().inflate(R.menu.add_task_options, menu);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
