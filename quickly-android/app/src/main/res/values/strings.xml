@@ -33,6 +33,7 @@
 
     <string name="toast_taskRemoved">Task removed</string>
     <string name="toast_allTasksRemoved">All tasks removed</string>
+    <string name="toast_showcaseReset">Quick start guide will show up on next application launch :)</string>
 
     <!-- Tasks-->
     <string name="task_untitled">Untitled task</string>
@@ -51,6 +52,7 @@
     <string name="pref_title_general_language">Language</string>
     <string name="pref_title_general_thirdPartyNotices">Third-party licences</string>
     <string name="pref_title_general_help">Help</string>
+    <string name="pref_title_general_resetShowcase">Show quick start guide on next launch</string>
     <string name="pref_title_general_about">About quickly</string>
 
     <!-- Preferences: group: accounts -->
@@ -77,4 +79,5 @@
     <string name="pref_desc_clearAll">THIS IS A DESTRUCTIVE OPERATION! All stored tasks will be removed. BOTH FROM CLOUD AND PHONE!</string>
     <string name="pref_desc_archivedTasks">View and restore or delete archived tasks</string>
     <string name="pref_desc_language">Change application display language</string>
+    <string name="pref_desc_resetShowcase">Show quick start guide on next application launch</string>
 </resources>

@@ -18,7 +18,7 @@
     <string name="title_noTaskName">Úloha bez názvu</string>
     <string name="toast_taskRemoved">Úloha odstránená</string>
     <string name="pref_desc_about">Navštíviť domovskú stránku aplikácie</string>
-    <string name="pref_desc_appTheme">...and I want it painted black.</string>
+    <string name="pref_desc_appTheme">…and I want it painted black.</string>
     <string name="pref_desc_archivedTasks">Zobraziť, obnoviť alebo odstrániť archivované úlohy</string>
     <string name="pref_desc_backup">Zálohovať všetky úlohy do súboru</string>
     <string name="pref_desc_clearAll">Toto je deštruktívna operácia! Všetky uložené úlohy budú ODSTRÁNENÉ!</string>
@@ -55,4 +55,5 @@
     <string name="showcase_addTask">Pridajte novú úlohu a nastavte pripomienky a ďalšie údaje</string>
     <string name="showcase_openSettings">Prispôsobte si quickly</string>
     <string name="showcase_quicklyAddTaks">Rýchlo pridajte novú úlohu</string>
+    <string name="qs_addTaskLongTitle">Pridať novú úlohu</string>
 </resources>

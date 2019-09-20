@@ -20,7 +20,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -61,11 +60,10 @@ public class Home
     ShowcaseConfig scCfg;
     SharedPreferences sharedPref;
     TaskListAdapter adapter;
+    boolean handled = false;
 
     @BindView(R.id.addTask)
     TextInputEditText textInputEditTextAddTask;
-    @BindView(R.id.title)
-    TextView tv_windowTitle;
     @BindView(R.id.taskList)
     NoScrollListView nsvTaskList;
     @BindView(R.id.getStartedHint)
@@ -108,9 +106,7 @@ public class Home
         reloadTasks.setOnRefreshListener(this);
         textInputEditTextAddTask.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         textInputEditTextAddTask.setOnEditorActionListener((v, id, event) -> {
-            boolean handled = false;
-            if (event != null && event.getKeyCode()
-                    == KeyEvent.KEYCODE_ENTER
+            if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
                     || id == EditorInfo.IME_ACTION_DONE) {
                 quickStoreTask();
                 handled = true;
@@ -137,12 +133,11 @@ public class Home
     }
 
     private void initAppUI() {
-        int appTheme = sharedPref.getInt("appTheme", 0);
-        if (appTheme == 2) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            setLocale(sharedPref.getString("appLang", String.valueOf(this.getResources()
+        if (sharedPref.getInt("app_theme", 0) == 2)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            setLocale(sharedPref.getString("app_language", String.valueOf(this.getResources()
                     .getConfiguration().getLocales().get(0))));
-        }
     }
 
     private boolean isEmpty(String string) {
@@ -151,8 +146,8 @@ public class Home
 
     private void populateData() {
         nestedScrollView.setVisibility(View.GONE);
-        LoadTask loadTask = new LoadTask();
-        loadTask.execute();
+        LoadStoredTasks loadStoredTasks = new LoadStoredTasks();
+        loadStoredTasks.execute();
     }
 
     private void quickStoreTask() {
@@ -195,6 +190,8 @@ public class Home
     public void loadListView(ListView listView, final ArrayList<HashMap<String, String>> dataList) {
         adapter = new TaskListAdapter(this, dataList);
         listView.setAdapter(adapter);
+
+        // Open AddTask.class in Edit mode
         listView.setOnItemClickListener((parent, view, position, id) ->
                 startActivity(new Intent(this, AddTask.class)
                         .putExtra("modifyTask", true)
@@ -203,16 +200,16 @@ public class Home
     }
 
     private void setLocale(String lang) {
-        Locale myLocale = new Locale(lang);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
+        Locale mLocale = new Locale(lang);
+        Resources mRes = getResources();
+        DisplayMetrics mDM = mRes.getDisplayMetrics();
+        Configuration mCfg = mRes.getConfiguration();
+        mCfg.locale = mLocale;
+        mRes.updateConfiguration(mCfg, mDM);
     }
 
     @SuppressLint("StaticFieldLeak")
-    class LoadTask extends AsyncTask<String, Void, String> {
+    class LoadStoredTasks extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
