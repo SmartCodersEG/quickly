@@ -20,6 +20,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
@@ -98,6 +99,7 @@ public class Settings extends AppCompatActivity {
                         .setNegativeButton(getString(R.string.btn_action_cancel), null)
                         .setPositiveButton(getString(R.string.btn_action_delete), (dialog, id) -> {
                             Objects.requireNonNull(getContext()).deleteDatabase("tasks.db");
+                            ProcessPhoenix.triggerRebirth(getContext(), new Intent(getContext(), Home.class));
                             Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content),
                                     getString(R.string.toast_allTasksRemoved), Snackbar.LENGTH_SHORT).show();
                         }).show();
@@ -111,11 +113,11 @@ public class Settings extends AppCompatActivity {
                     switch (which) {
                         case 0: // English
                             setLocale("en");
-                            sharedPrefEditor.putString("appLang", "en").apply();
+                            sharedPrefEditor.putString("appLang", "en_US").apply();
                             break;
                         case 1: // Slovak
                             setLocale("sk");
-                            sharedPrefEditor.putString("appLang", "sk").apply();
+                            sharedPrefEditor.putString("appLang", "sk_SK").apply();
                             break;
                     }
                 });

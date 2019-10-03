@@ -77,7 +77,6 @@
             app:title="@string/pref_title_general_help" />
 
         <Preference
-            app:icon="@drawable/ic_help_24dp"
             app:key="app_resetShowcase"
             app:summary="@string/pref_desc_resetShowcase"
             app:title="@string/pref_title_general_resetShowcase" />

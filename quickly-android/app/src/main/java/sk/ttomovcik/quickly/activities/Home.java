@@ -6,14 +6,10 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -33,7 +29,6 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -96,7 +91,8 @@ public class Home
 
         // init settings
         sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
-        initAppUI();
+        if (sharedPref.getInt("app_theme", 0) == 2)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         initShowcase(this, this);
@@ -130,14 +126,6 @@ public class Home
     public void onRefresh() {
         populateData();
         new Handler().postDelayed(() -> reloadTasks.setRefreshing(false), 500);
-    }
-
-    private void initAppUI() {
-        if (sharedPref.getInt("app_theme", 0) == 2)
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            setLocale(sharedPref.getString("app_language", String.valueOf(this.getResources()
-                    .getConfiguration().getLocales().get(0))));
     }
 
     private boolean isEmpty(String string) {
@@ -197,15 +185,6 @@ public class Home
                         .putExtra("modifyTask", true)
                         .putExtra("id", dataList.get(+position).get(KEY_ID))
                         .putExtra("task", dataList.get(+position).get(KEY_TASK))));
-    }
-
-    private void setLocale(String lang) {
-        Locale mLocale = new Locale(lang);
-        Resources mRes = getResources();
-        DisplayMetrics mDM = mRes.getDisplayMetrics();
-        Configuration mCfg = mRes.getConfiguration();
-        mCfg.locale = mLocale;
-        mRes.updateConfiguration(mCfg, mDM);
     }
 
     @SuppressLint("StaticFieldLeak")
