@@ -170,7 +170,7 @@ public class Settings extends AppCompatActivity {
             {
                 MaterialShowcaseView.resetSingleUse(Objects.requireNonNull(getContext()), "seqId");
                 Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content),
-                        getString(R.string.toast_allTasksRemoved), Snackbar.LENGTH_SHORT).show();
+                        getString(R.string.toast_showcaseReset), Snackbar.LENGTH_SHORT).show();
                 return false;
             });
 
