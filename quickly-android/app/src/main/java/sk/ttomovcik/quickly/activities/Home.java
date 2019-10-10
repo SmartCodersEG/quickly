@@ -6,20 +6,16 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -33,7 +29,6 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -60,11 +55,10 @@ public class Home
     ShowcaseConfig scCfg;
     SharedPreferences sharedPref;
     TaskListAdapter adapter;
+    boolean handled = false;
 
     @BindView(R.id.addTask)
     TextInputEditText textInputEditTextAddTask;
-    @BindView(R.id.title)
-    TextView tv_windowTitle;
     @BindView(R.id.taskList)
     NoScrollListView nsvTaskList;
     @BindView(R.id.getStartedHint)
@@ -95,39 +89,25 @@ public class Home
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // init settings
         sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
-
-        int appTheme = sharedPref.getInt("appTheme", 0);
-        String appLang = sharedPref.getString("appLang", "en");
-
-        if (appTheme == 2) {
+        if (sharedPref.getInt("app_theme", 0) == 2)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
-
-        setLocale(appLang);
         setContentView(R.layout.activity_home);
-
-        tv_windowTitle.setOnLongClickListener(view ->
-        {
-            Snackbar.make(getWindow().getDecorView().getRootView(), "meow", Snackbar.LENGTH_SHORT).show();
-            return true;
-        });
-
         ButterKnife.bind(this);
         initShowcase(this, this);
+
+        // load stored tasks and init textInput for new tasks
         taskDbHelper = new TaskDbHelper(this);
         reloadTasks.setOnRefreshListener(this);
-
-        runOnUiThread(() -> {
-            textInputEditTextAddTask.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-            textInputEditTextAddTask.setOnEditorActionListener((v, id, event) -> {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (id == KeyEvent.ACTION_DOWN)) {
-                    quickStoreTask();
-                    return true;
-                }
-                return false;
-            });
+        textInputEditTextAddTask.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        textInputEditTextAddTask.setOnEditorActionListener((v, id, event) -> {
+            if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
+                    || id == EditorInfo.IME_ACTION_DONE) {
+                quickStoreTask();
+                handled = true;
+            }
+            return handled;
         });
     }
 
@@ -148,18 +128,25 @@ public class Home
         new Handler().postDelayed(() -> reloadTasks.setRefreshing(false), 500);
     }
 
+    private boolean isEmpty(String string) {
+        return string == null || string.length() == 0;
+    }
+
     private void populateData() {
         nestedScrollView.setVisibility(View.GONE);
-        hintLayout.setVisibility(View.VISIBLE);
-        LoadTask loadTask = new LoadTask();
-        loadTask.execute();
+        LoadStoredTasks loadStoredTasks = new LoadStoredTasks();
+        loadStoredTasks.execute();
     }
 
     private void quickStoreTask() {
         String _taskName = String.valueOf(textInputEditTextAddTask.getText());
-        taskDbHelper.addTask(_taskName, "", "", "", "");
-        Objects.requireNonNull(textInputEditTextAddTask.getText()).clear();
-        populateData();
+        if (isEmpty(_taskName)) {
+            Snackbar.make(getWindow().getDecorView().getRootView(), "No task name", Snackbar.LENGTH_SHORT);
+        } else {
+            taskDbHelper.addTask(_taskName, "", "", "", "");
+            Objects.requireNonNull(textInputEditTextAddTask.getText()).clear();
+            populateData();
+        }
     }
 
     private void initShowcase(Context mCtx, Activity activity) {
@@ -174,6 +161,7 @@ public class Home
         mSSeq.start();
     }
 
+    //
     public void loadDataList(Cursor cursor, ArrayList<HashMap<String, String>> dataList) {
         if (cursor != null) {
             cursor.moveToFirst();
@@ -190,6 +178,8 @@ public class Home
     public void loadListView(ListView listView, final ArrayList<HashMap<String, String>> dataList) {
         adapter = new TaskListAdapter(this, dataList);
         listView.setAdapter(adapter);
+
+        // Open AddTask.class in Edit mode
         listView.setOnItemClickListener((parent, view, position, id) ->
                 startActivity(new Intent(this, AddTask.class)
                         .putExtra("modifyTask", true)
@@ -197,17 +187,8 @@ public class Home
                         .putExtra("task", dataList.get(+position).get(KEY_TASK))));
     }
 
-    private void setLocale(String lang) {
-        Locale myLocale = new Locale(lang);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-    }
-
     @SuppressLint("StaticFieldLeak")
-    class LoadTask extends AsyncTask<String, Void, String> {
+    class LoadStoredTasks extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();

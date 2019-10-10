@@ -7,20 +7,17 @@
     <string name="btn_addTask">Finish</string>
     <string name="btn_removeTask">Delete task</string>
     <string name="btn_archiveTask">Archive task</string>
-    <string name="btn_add_reminder">Add reminder</string>
-    <string name="btn_attach_files">Attach file(s)</string>
     <string name="btn_action_cancel">Cancel</string>
     <string name="btn_action_delete">Delete</string>
     <string name="btn_gotIt">GOT IT!</string>
 
     <string name="title_addTask">Add task</string>
     <string name="title_updateTask">Modify task</string>
-    <string name="title_noTaskName">No task name</string>
     <string name="title_appTheme">Application theme</string>
 
     <string name="hint_quickAddText">Do something amazing</string>
     <string name="hint_taskName">Name</string>
-    <string name="hint_taskNote">Additional tasks (optional)</string>
+    <string name="hint_taskNote">Notes</string>
     <string name="hint_noTasksAdded">It\'s pretty empty in here.\nGet started by adding something.</string>
 
     <string name="showcase_quicklyAddTaks">Quickly add new tasks</string>
@@ -33,6 +30,7 @@
 
     <string name="toast_taskRemoved">Task removed</string>
     <string name="toast_allTasksRemoved">All tasks removed</string>
+    <string name="toast_showcaseReset">Quick start guide will show up on next application launch :)</string>
 
     <!-- Tasks-->
     <string name="task_untitled">Untitled task</string>
@@ -51,6 +49,7 @@
     <string name="pref_title_general_language">Language</string>
     <string name="pref_title_general_thirdPartyNotices">Third-party licences</string>
     <string name="pref_title_general_help">Help</string>
+    <string name="pref_title_general_resetShowcase">Show quick start guide on next launch</string>
     <string name="pref_title_general_about">About quickly</string>
 
     <!-- Preferences: group: accounts -->
@@ -77,4 +76,5 @@
     <string name="pref_desc_clearAll">THIS IS A DESTRUCTIVE OPERATION! All stored tasks will be removed. BOTH FROM CLOUD AND PHONE!</string>
     <string name="pref_desc_archivedTasks">View and restore or delete archived tasks</string>
     <string name="pref_desc_language">Change application display language</string>
+    <string name="pref_desc_resetShowcase">Show quick start guide on next application launch</string>
 </resources>

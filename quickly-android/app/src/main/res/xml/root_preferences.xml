@@ -5,21 +5,21 @@
         <Preference
             app:enabled="false"
             app:icon="@drawable/ic_person_24dp"
-            app:key="signIn"
+            app:key="cloud_signIn"
             app:summary="@string/pref_desc_connect"
             app:title="@string/pref_title_accounts_connect" />
 
         <SwitchPreferenceCompat
             app:enabled="false"
             app:icon="@drawable/ic_sync_24dp"
-            app:key="syncState"
+            app:key="cloud_allowSync"
             app:summary="@string/pref_desc_sync"
             app:title="@string/pref_title_accounts_sync" />
 
         <Preference
             app:enabled="false"
             app:icon="@drawable/ic_delete_forever_24dp"
-            app:key="deleteAccount"
+            app:key="cloud_snapFingers"
             app:summary="@string/pref_desc_delete"
             app:title="@string/pref_title_accounts_delete" />
     </PreferenceCategory>
@@ -30,27 +30,27 @@
         <Preference
             app:enabled="false"
             app:icon="@drawable/ic_archive_24dp"
-            app:key="archivedNotes"
+            app:key="tasks_viewArchived"
             app:summary="@string/pref_desc_archivedTasks"
             app:title="@string/pref_title_noteMgmt_archivedTasks" />
 
         <Preference
             app:enabled="false"
             app:icon="@drawable/ic_save_24dp"
-            app:key="exportDb"
+            app:key="db_export"
             app:summary="@string/pref_desc_backup"
             app:title="@string/pref_title_noteMgmt_backup" />
 
         <Preference
             app:enabled="false"
             app:icon="@drawable/ic_restore_24dp"
-            app:key="importNotesFromDb"
+            app:key="db_import"
             app:summary="@string/pref_desc_restore"
             app:title="@string/pref_title_noteMgmt_restore" />
 
         <Preference
             app:icon="@drawable/ic_delete_forever_24dp"
-            app:key="clearAll"
+            app:key="db_deleteAll"
             app:summary="@string/pref_desc_clearAll"
             app:title="@string/pref_title_noteMgmt_clearAll" />
     </PreferenceCategory>
@@ -60,29 +60,34 @@
 
         <Preference
             app:icon="@drawable/ic_language_24dp"
-            app:key="language"
+            app:key="app_language"
             app:summary="@string/pref_desc_language"
             app:title="@string/pref_title_general_language" />
 
         <Preference
             app:icon="@drawable/ic_palette_24dp"
-            app:key="appTheme"
+            app:key="app_theme"
             app:summary="@string/pref_desc_appTheme"
             app:title="@string/title_appTheme" />
 
         <Preference
             app:icon="@drawable/ic_help_24dp"
-            app:key="help"
+            app:key="app_help"
             app:summary="@string/pref_desc_help"
             app:title="@string/pref_title_general_help" />
 
         <Preference
-            app:key="thirdParty"
+            app:key="app_resetShowcase"
+            app:summary="@string/pref_desc_resetShowcase"
+            app:title="@string/pref_title_general_resetShowcase" />
+
+        <Preference
+            app:key="app_thirdPartyLibs"
             app:summary="@string/pref_desc_thirdPartyNotices"
             app:title="@string/pref_title_general_thirdPartyNotices" />
 
         <Preference
-            app:key="about"
+            app:key="app_about"
             app:summary="@string/pref_desc_about"
             app:title="@string/pref_title_general_about" />
     </PreferenceCategory>

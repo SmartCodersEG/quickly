@@ -25,35 +25,16 @@
             android:typeface="monospace" />
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <TextView
-        android:id="@+id/tv_taskName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:maxHeight="128dp"
-        android:maxLines="2"
-        android:scrollbars="vertical"
-        android:text="@string/title_noTaskName"
-        android:textAlignment="center"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="24sp"
-        android:typeface="monospace" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:layout_alignParentBottom="true">
+        android:layout_above="@id/fab_addTask">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/taskName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/taskNote"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
@@ -68,27 +49,28 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/taskNote"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/fab_addTask"
+            android:layout_below="@id/taskName"
+            android:gravity="top"
+            android:layout_height="match_parent"
             android:layout_margin="16dp"
             android:drawablePadding="8dp"
             android:hint="@string/hint_taskNote"
             android:lines="4"
             android:singleLine="false"
             android:textColor="@color/colorTextSecondary" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fab_addTask"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="16dp"
-            android:text="@string/btn_addTask"
-            android:textColor="@color/colorFabIcon"
-            app:backgroundTint="@color/colorAccent"
-            app:icon="@drawable/ic_done_24dp"
-            app:iconTint="@color/colorFabIcon"
-            tools:ignore="RelativeOverlap" />
     </RelativeLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_addTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:text="@string/btn_addTask"
+        android:textColor="@color/colorFabIcon"
+        app:backgroundTint="@color/colorAccent"
+        app:icon="@drawable/ic_done_24dp"
+        app:iconTint="@color/colorFabIcon"
+        tools:ignore="RelativeOverlap" />
 </RelativeLayout>

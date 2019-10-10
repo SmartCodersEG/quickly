@@ -6,12 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import sk.ttomovcik.quickly.BuildConfig;
-
 public class TaskDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "tasks.db";
-    private static final String DB_TABLE = "todo";
+    private static final String DB_TABLE = "tasks";
     private static final int DB_VERSION = 1;
 
     /**

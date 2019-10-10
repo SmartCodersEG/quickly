@@ -2,23 +2,20 @@
 <resources>
     <string name="app_name">quickly</string>
     <string name="btn_addTask">Dokončiť</string>
-    <string name="btn_add_reminder">Pripomienka</string>
-    <string name="btn_attach_files">Pridať súbor/-y</string>
     <string name="btn_removeTask">Odstrániť úlohu</string>
     <string name="btn_archiveTask">Archivovať úlohu</string>
     <string name="hint_noTasksAdded">Nič tu nie je.\nZačnite pridaním nejakej úlohy.</string>
     <string name="hint_quickAddText">Pridať úlohu</string>
     <string name="hint_taskName">Názov</string>
-    <string name="hint_taskNote">Poznámky (voliteľné)</string>
+    <string name="hint_taskNote">Poznámky</string>
     <string name="pref_appTheme_dark">Tmavá</string>
     <string name="pref_appTheme_light">Svetlá</string>
     <string name="pref_appTheme_setByBatterySaver">Podľa šetriča batérie (predvolené)</string>
     <string name="pref_appTheme_systemDefault">Podľa nastavení systému (predvolené)</string>
     <string name="title_updateTask">Upraviť úlohu</string>
-    <string name="title_noTaskName">Úloha bez názvu</string>
     <string name="toast_taskRemoved">Úloha odstránená</string>
     <string name="pref_desc_about">Navštíviť domovskú stránku aplikácie</string>
-    <string name="pref_desc_appTheme">...and I want it painted black.</string>
+    <string name="pref_desc_appTheme">…and I want it painted black.</string>
     <string name="pref_desc_archivedTasks">Zobraziť, obnoviť alebo odstrániť archivované úlohy</string>
     <string name="pref_desc_backup">Zálohovať všetky úlohy do súboru</string>
     <string name="pref_desc_clearAll">Toto je deštruktívna operácia! Všetky uložené úlohy budú ODSTRÁNENÉ!</string>
@@ -55,4 +52,5 @@
     <string name="showcase_addTask">Pridajte novú úlohu a nastavte pripomienky a ďalšie údaje</string>
     <string name="showcase_openSettings">Prispôsobte si quickly</string>
     <string name="showcase_quicklyAddTaks">Rýchlo pridajte novú úlohu</string>
+    <string name="qs_addTaskLongTitle">Pridať novú úlohu</string>
 </resources>

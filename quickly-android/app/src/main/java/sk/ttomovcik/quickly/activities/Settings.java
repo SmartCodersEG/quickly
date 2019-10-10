@@ -20,6 +20,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
@@ -28,12 +29,13 @@ import java.util.Objects;
 
 import sk.ttomovcik.quickly.BuildConfig;
 import sk.ttomovcik.quickly.R;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class Settings extends AppCompatActivity {
 
     static int ANDROID_API_VERSION = Build.VERSION.SDK_INT;
     SharedPreferences preferences;
-    static SharedPreferences.Editor edit;
+    static SharedPreferences.Editor sharedPrefEditor;
 
 
     @SuppressLint("CommitPrefEdits")
@@ -53,7 +55,7 @@ public class Settings extends AppCompatActivity {
 
 
         preferences = getSharedPreferences(BuildConfig.APPLICATION_ID, 0);
-        edit = preferences.edit();
+        sharedPrefEditor = preferences.edit();
     }
 
     @Override
@@ -70,14 +72,61 @@ public class Settings extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
-            Preference _help = findPreference("help");
-            Preference _thirdParty = findPreference("thirdParty");
-            Preference _about = findPreference("about");
-            Preference _appTheme = findPreference("appTheme");
-            Preference _language = findPreference("language");
-            Preference _clearAll = findPreference("clearAll");
+            /*
+            TODO: Add stuff below asap.
+            Preference pref_cloud_signIn = findPreference("cloud_signIn");
+            Preference pref_cloud_allowSync = findPreference("cloud_allowSync");
+            Preference pref_cloud_snapFingers = findPreference("cloud_snapFingers");
+            Preference pref_tasks_archived = findPreference("tasks_viewArchived");
+            Preference pref_db_export = findPreference("db_export");
+            Preference pref_db_import = findPreference("db_import");
+            */
 
-            Objects.requireNonNull(_appTheme).setOnPreferenceClickListener(preference ->
+            Preference pref_db_deleteAll = findPreference("db_deleteAll");
+            Preference pref_app_language = findPreference("app_language");
+            Preference pref_app_theme = findPreference("app_theme");
+            Preference pref_app_help = findPreference("app_help");
+            Preference pref_app_resetShowcase = findPreference("app_resetShowcase");
+            Preference pref_app_thirdPartyLibs = findPreference("app_thirdPartyLibs");
+            Preference pref_app_about = findPreference("app_about");
+
+            Objects.requireNonNull(pref_db_deleteAll).setOnPreferenceClickListener(preference ->
+            {
+                new AlertDialog.Builder(Objects.requireNonNull(getContext()))
+                        .setIcon(R.drawable.ic_delete_forever_24dp)
+                        .setTitle(getString(R.string.dialog_areYouSure))
+                        .setMessage("Are you sure you want to close without saving this task?")
+                        .setNegativeButton(getString(R.string.btn_action_cancel), null)
+                        .setPositiveButton(getString(R.string.btn_action_delete), (dialog, id) -> {
+                            Objects.requireNonNull(getContext()).deleteDatabase("tasks.db");
+                            ProcessPhoenix.triggerRebirth(getContext(), new Intent(getContext(), Home.class));
+                            Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content),
+                                    getString(R.string.toast_allTasksRemoved), Snackbar.LENGTH_SHORT).show();
+                        }).show();
+                return false;
+            });
+
+            Objects.requireNonNull(pref_app_language).setOnPreferenceClickListener(preference ->
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+                builder.setItems(R.array.languages, (dialog, which) -> {
+                    switch (which) {
+                        case 0: // English
+                            setLocale("en");
+                            sharedPrefEditor.putString("appLang", "en_US").apply();
+                            break;
+                        case 1: // Slovak
+                            setLocale("sk");
+                            sharedPrefEditor.putString("appLang", "sk_SK").apply();
+                            break;
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                return false;
+            });
+
+            Objects.requireNonNull(pref_app_theme).setOnPreferenceClickListener(preference ->
             {
                 String[] APP_THEMES_PRE_Q = {getString(R.string.pref_appTheme_setByBatterySaver), getString(R.string.pref_appTheme_light), getString(R.string.pref_appTheme_dark)};
                 String[] APP_THEMES_Q = {getString(R.string.pref_appTheme_systemDefault), getString(R.string.pref_appTheme_light), getString(R.string.pref_appTheme_dark)};
@@ -90,18 +139,18 @@ public class Settings extends AppCompatActivity {
                     switch (which) {
                         case 0: // Set by battery saver or system default
                             applyTheme(0);
-                            edit.putInt("appTheme", 0).apply();
-                            edit.apply();
+                            sharedPrefEditor.putInt("appTheme", 0).apply();
+                            sharedPrefEditor.apply();
                             break;
                         case 1: // Light theme
                             applyTheme(1);
-                            edit.putInt("appTheme", 1).apply();
-                            edit.apply();
+                            sharedPrefEditor.putInt("appTheme", 1).apply();
+                            sharedPrefEditor.apply();
                             break;
                         case 2: // Dark theme
                             applyTheme(2);
-                            edit.putInt("appTheme", 2).apply();
-                            edit.apply();
+                            sharedPrefEditor.putInt("appTheme", 2).apply();
+                            sharedPrefEditor.apply();
                             break;
                     }
                 });
@@ -110,14 +159,22 @@ public class Settings extends AppCompatActivity {
                 return false;
             });
 
-            Objects.requireNonNull(_help).setOnPreferenceClickListener(preference ->
+            Objects.requireNonNull(pref_app_help).setOnPreferenceClickListener(preference ->
             {
                 startActivity(new Intent(Intent.ACTION_VIEW,
                         Uri.parse("http://github.com/ttomovcik/quickly/wiki")));
                 return false;
             });
 
-            Objects.requireNonNull(_thirdParty).setOnPreferenceClickListener(preference ->
+            Objects.requireNonNull(pref_app_resetShowcase).setOnPreferenceClickListener(preference ->
+            {
+                MaterialShowcaseView.resetSingleUse(Objects.requireNonNull(getContext()), "seqId");
+                Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content),
+                        getString(R.string.toast_showcaseReset), Snackbar.LENGTH_SHORT).show();
+                return false;
+            });
+
+            Objects.requireNonNull(pref_app_thirdPartyLibs).setOnPreferenceClickListener(preference ->
             {
                 new LibsBuilder()
                         .withActivityStyle(Libs.ActivityStyle.LIGHT)
@@ -130,49 +187,14 @@ public class Settings extends AppCompatActivity {
                 return false;
             });
 
-            Objects.requireNonNull(_about).setOnPreferenceClickListener(preference ->
+            Objects.requireNonNull(pref_app_about).setOnPreferenceClickListener(preference ->
             {
                 startActivity(new Intent(Intent.ACTION_VIEW,
                         Uri.parse("http://github.com/ttomovcik/quickly/")));
                 return false;
             });
 
-            Objects.requireNonNull(_clearAll).setOnPreferenceClickListener(preference ->
-            {
-                // Creates empty task after deleting DB.
-                new AlertDialog.Builder(Objects.requireNonNull(getContext()))
-                        .setIcon(R.drawable.ic_delete_forever_24dp)
-                        .setTitle(getString(R.string.dialog_areYouSure))
-                        .setMessage("Are you sure you want to close without saving this task?")
-                        .setNegativeButton(getString(R.string.btn_action_cancel), null)
-                        .setPositiveButton(getString(R.string.btn_action_delete), (dialog, id) -> {
-                            String DB_NAME = BuildConfig.APPLICATION_ID + ".todo.db";
-                            Objects.requireNonNull(getContext()).deleteDatabase(DB_NAME);
-                            Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content),
-                                    getString(R.string.toast_allTasksRemoved), Snackbar.LENGTH_SHORT).show();
-                        }).show();
-                return false;
-            });
 
-            Objects.requireNonNull(_language).setOnPreferenceClickListener(preference ->
-            {
-                AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
-                builder.setItems(R.array.languages, (dialog, which) -> {
-                    switch (which) {
-                        case 0: // English
-                            setLocale("en");
-                            edit.putString("appLang", "en").apply();
-                            break;
-                        case 1: // Slovak
-                            setLocale("sk");
-                            edit.putString("appLang", "sk").apply();
-                            break;
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                return false;
-            });
         }
 
         private void setLocale(String lang) {

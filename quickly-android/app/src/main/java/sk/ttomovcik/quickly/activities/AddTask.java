@@ -3,9 +3,6 @@ package sk.ttomovcik.quickly.activities;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.text.method.ScrollingMovementMethod;
 import android.transition.Slide;
 import android.view.Gravity;
 import android.view.Menu;
@@ -42,8 +39,6 @@ public class AddTask extends AppCompatActivity {
     MaterialToolbar materialToolbar;
     @BindView(R2.id.title)
     TextView title;
-    @BindView(R2.id.tv_taskName)
-    TextView tvTaskName;
     @BindView(R2.id.taskName)
     TextInputEditText taskNameBox;
     @BindView(R2.id.taskNote)
@@ -67,7 +62,8 @@ public class AddTask extends AppCompatActivity {
         id = intent.getStringExtra("id");
         modifyTask = intent.getBooleanExtra("modifyTask", false);
 
-        // Add toolbar stuff
+        // TODO: Preskočiť potvrdenie pred ukončením po úprave
+
         setSupportActionBar(materialToolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle(null);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
@@ -75,14 +71,13 @@ public class AddTask extends AppCompatActivity {
 
         taskDbHelper = new TaskDbHelper(this);
         if (modifyTask) setModifyTask();
-
-        // TODO: Set max height
-        displayTaskName();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add_task_options, menu);
+        if (modifyTask) {
+            getMenuInflater().inflate(R.menu.add_task_options, menu);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -156,27 +151,6 @@ public class AddTask extends AppCompatActivity {
         getWindow().setEnterTransition(slide);
     }
 
-    private void displayTaskName() {
-        taskNameBox.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                tvTaskName.setMovementMethod(ScrollingMovementMethod.getInstance());
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                tvTaskName.setText(taskNameBox.getText());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (isEmpty(taskNameBox.toString())) {
-                    tvTaskName.setText(getString(R.string.title_noTaskName));
-                }
-            }
-        });
-    }
-
     private void populatePlaceholdersFromStoredData(String id) {
         Cursor cTaskData = taskDbHelper.getDataFromId(id);
         String _taskName = null, _taskNote = null;
@@ -186,7 +160,6 @@ public class AddTask extends AppCompatActivity {
             _taskNote = cTaskData.getString(cTaskData.getColumnIndex("taskNote"));
         }
         if (!isEmpty(_taskName)) taskNameBox.setText(_taskName);
-        if (!isEmpty(_taskName)) tvTaskName.setText(_taskName);
         if (!isEmpty(_taskNote)) taskNameBox.setText(_taskNote);
     }
 
