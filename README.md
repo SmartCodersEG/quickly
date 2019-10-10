@@ -19,6 +19,8 @@
   <p align="center">
     Simple To-Do app for Android.
     <br />
+    App is under development. Final version will be out this December
+    <br />
     <a href="https://github.com/ttomovcik/quickly/releases"><strong>Download for Android »</strong></a>
     <br />
     <br />
