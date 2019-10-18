@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">quickly</string>
+    <string name="app_desc">note taking. minimal, maybe a bit much.</string>
+    <string name="app_eggs">
+        minimalism. well, the dev has no clue how to do
+        something more advanced, yet. So here you are, reading the source code of this app
+        and thinking to yourself, pretty much nothing. just staring at this long ass string
+        that won't be used anywhere in this app. except that few hidden easter eggs…
+        Fin.
+    </string>
+
+    <string name="title_myNotes">my notes</string>
+
+    <string name="hint_addNoteTitle">Untitled note</string>
+    <string name="hint_addNoteText">dear diary…</string>
+</resources>
