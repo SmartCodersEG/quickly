@@ -7,8 +7,6 @@
         <item name="android:windowContentTransitions">true</item>
         <item name="android:navigationBarColor">@color/colorWindowBackground</item>
         <item name="android:statusBarColor">@color/colorPanels</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
 
         <item name="scrimBackground" tools:ignore="PrivateResource">@color/mtrl_scrim_color</item>
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1

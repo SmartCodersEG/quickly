@@ -17,7 +17,9 @@ public class TaskListAdapter extends BaseAdapter {
     private Activity activity;
     private ArrayList<HashMap<String, String>> data;
 
-    public TaskListAdapter(Activity activity, ArrayList<HashMap<String, String>> data) {
+    public TaskListAdapter(Activity activity,
+                           ArrayList<HashMap<String, String>> data)
+    {
         this.activity = activity;
         this.data = data;
     }
