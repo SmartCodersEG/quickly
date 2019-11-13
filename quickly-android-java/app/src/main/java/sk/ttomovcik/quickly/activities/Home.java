@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -71,6 +72,8 @@ public class Home
     ExtendedFloatingActionButton fab_addTask;
     @BindView(R.id.reloadTasks)
     SwipeRefreshLayout reloadTasks;
+    @BindView(R.id.toolbar)
+    MaterialToolbar toolbar;
 
     @OnClick(R.id.fab_addTask)
     void onClickFabAddTask() {

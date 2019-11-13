@@ -140,17 +140,14 @@ public class Settings extends AppCompatActivity {
                         case 0: // Set by battery saver or system default
                             applyTheme(0);
                             sharedPrefEditor.putInt("appTheme", 0).apply();
-                            sharedPrefEditor.apply();
                             break;
                         case 1: // Light theme
                             applyTheme(1);
                             sharedPrefEditor.putInt("appTheme", 1).apply();
-                            sharedPrefEditor.apply();
                             break;
                         case 2: // Dark theme
                             applyTheme(2);
                             sharedPrefEditor.putInt("appTheme", 2).apply();
-                            sharedPrefEditor.apply();
                             break;
                     }
                 });
@@ -204,7 +201,7 @@ public class Settings extends AppCompatActivity {
             Configuration conf = res.getConfiguration();
             conf.locale = myLocale;
             res.updateConfiguration(conf, dm);
-            Intent refresh = new Intent(getActivity(), Home.class);
+            Intent refresh = new Intent(getActivity(), Objects.requireNonNull(getActivity()).getClass());
             startActivity(refresh);
         }
 
